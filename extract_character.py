@@ -959,6 +959,47 @@ def gather_actions(data, ability_scores, proficiency):
     return actions
 
 
+def gather_encumbrance(data, ability_scores):
+    """Total carried weight vs. carrying capacity (Strength score x15 - the core 5e rule,
+    used regardless of table, in both the 2014 and 2024 PHB). Also surfaces the optional
+    variant-encumbrance thresholds (5x/10x Strength) since they're the same formula
+    family and cheap to include, plus the character's own DDB encumbrance/coin-weight
+    preferences (data.preferences.encumbranceType/ignoreCoinWeight) so a consumer can see
+    what the sheet itself was configured to enforce - encumbranceType is passed through
+    raw rather than decoded, since it's the same value (1) in all four exports this
+    script was tested against, so there's no confirmed mapping for what other values
+    would mean.
+
+    Coin weight (50 coins/lb, the standard 5e rule) is only added to the total if
+    ignoreCoinWeight is explicitly False - it's True in all four exports here, so no
+    tracked character currently has it added."""
+    str_score = ability_scores["Strength"]["score"]
+
+    total_weight = 0.0
+    for item in data.get("inventory", []):
+        d = item.get("definition") or {}
+        weight = d.get("weight") or 0
+        multiplier = d.get("weightMultiplier") or 1
+        quantity = item.get("quantity") or 0
+        total_weight += weight * multiplier * quantity
+
+    preferences = data.get("preferences") or {}
+    ignore_coin_weight = preferences.get("ignoreCoinWeight", True)
+    coin_weight_included = not ignore_coin_weight
+    if coin_weight_included:
+        total_coins = sum((data.get("currencies") or {}).values())
+        total_weight += total_coins / 50
+
+    return {
+        "total_weight_carried": round(total_weight, 2),
+        "carrying_capacity": str_score * 15,
+        "encumbered_at": str_score * 5,
+        "heavily_encumbered_at": str_score * 10,
+        "coin_weight_included": coin_weight_included,
+        "ddb_encumbrance_setting": preferences.get("encumbranceType"),
+    }
+
+
 def gather_computed_stats(data, ability_scores, proficiency, proficiencies):
     """Derived combat/spellcasting numbers, kept separate from the raw source fields
     above them. Everything here is *computed* by this script, not read verbatim from
@@ -1035,6 +1076,7 @@ def gather_computed_stats(data, ability_scores, proficiency, proficiencies):
         "armor_class": armor_class,
         "initiative": initiative,
         "spellcasting": spellcasting,
+        "encumbrance": gather_encumbrance(data, ability_scores),
     }
 
 
@@ -1113,6 +1155,8 @@ def to_text_summary(c):
     lines.append(f"Passive Perception: {stats['passive_perception']}")
     for sc in stats["spellcasting"]:
         lines.append(f"Spell Save DC ({sc['class']}): {sc['spell_save_dc']}  |  Spell Attack: {fmt_mod(sc['spell_attack_bonus'])}")
+    enc = stats["encumbrance"]
+    lines.append(f"Carrying: {enc['total_weight_carried']} lb / {enc['carrying_capacity']} lb capacity")
     lines.append("")
     saves = c["proficiencies"]["saving_throws"]
     lines.append("Saving Throws: " + ", ".join(f"{name} {fmt_mod(v['bonus'])}" for name, v in saves.items()))

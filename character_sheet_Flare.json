@@ -1112,6 +1112,14 @@
         "spell_save_dc": 13,
         "spell_attack_bonus": 5
       }
-    ]
+    ],
+    "encumbrance": {
+      "total_weight_carried": 60.0,
+      "carrying_capacity": 150,
+      "encumbered_at": 50,
+      "heavily_encumbered_at": 100,
+      "coin_weight_included": false,
+      "ddb_encumbrance_setting": 1
+    }
   }
 }
