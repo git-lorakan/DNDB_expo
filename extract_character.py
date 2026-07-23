@@ -188,6 +188,40 @@ def fmt_mod(m):
     return f"+{m}" if m >= 0 else str(m)
 
 
+def format_spell_line(s):
+    """One-line summary of a spell's full casting detail for the plain-text output:
+    casting time, range/area, components, concentration/ritual flags, and (if present)
+    the attack-roll/save-DC requirement plus its base damage/healing die."""
+    ct = s["casting_time"]
+    casting = f"{ct['amount']} {ct['unit']}" if ct.get("amount") and ct.get("unit") else (ct.get("unit") or "?")
+
+    rng = s["range"]
+    if rng.get("area_type") and rng.get("area_size"):
+        range_str = f"{rng['origin']} {rng['area_size']}-ft {rng['area_type']}"
+    elif rng.get("distance_ft"):
+        range_str = f"{rng['origin']} {rng['distance_ft']} ft"
+    else:
+        range_str = rng.get("origin") or "?"
+
+    comps = "/".join(s["components"]["types"])
+    flags = "".join(flag for flag, on in (("C", s["concentration"]), ("R", s["ritual"])) if on)
+    flag_str = f" {flags}" if flags else ""
+
+    header = f"[{s['level']}] {s['name']} ({casting}, {range_str}, {comps}){flag_str}"
+
+    effect_bits = []
+    if s["requires_attack_roll"]:
+        effect_bits.append("attack roll")
+    if s["requires_saving_throw"]:
+        effect_bits.append(f"{s['save_ability'] or '?'} save")
+    for eff in s["effects"]:
+        if eff["base_amount"]:
+            effect_bits.append(f"{eff['base_amount']} {eff['subtype'] or eff['type'] or ''}".strip())
+    if effect_bits:
+        header += "  — " + ", ".join(effect_bits)
+    return header
+
+
 def iter_modifiers(data):
     """All modifier entries across every category (race/class/background/item/feat/condition)."""
     for category, mods in (data.get("modifiers") or {}).items():
@@ -1260,9 +1294,27 @@ def to_text_summary(c):
     prof_skills = [f"{name} {fmt_mod(v['bonus'])}{'*' if v['expertise'] else ''}"
                    for name, v in c["proficiencies"]["skills"].items() if v["proficient"]]
     lines.append("Skill Proficiencies: " + ", ".join(prof_skills))
+    if c["background"].get("feature_name"):
+        lines.append(f"Background Feature: {c['background']['feature_name']}")
     if c["feats"]:
         lines.append("")
         lines.append("Feats: " + ", ".join(f["name"] for f in c["feats"]))
+
+    resource_lines = []
+    for cl in c["classes"]:
+        for feat in cl["features_gained"]:
+            for r in feat.get("resources", []):
+                resource_lines.append(f"  {feat['name']}: {r['uses_remaining']}/{r['max_uses']} ({r['reset_type']})")
+    for t in c["race"]["traits"]:
+        for r in t.get("resources", []):
+            resource_lines.append(f"  {t['name']}: {r['uses_remaining']}/{r['max_uses']} ({r['reset_type']})")
+    for ft in c["feats"]:
+        for r in ft.get("resources", []):
+            resource_lines.append(f"  {ft['name']}: {r['uses_remaining']}/{r['max_uses']} ({r['reset_type']})")
+    if resource_lines:
+        lines.append("")
+        lines.append("Resources:")
+        lines.extend(resource_lines)
     lines.append("")
     lines.append(f"Currency: {c['currency']}")
     lines.append("")
@@ -1278,7 +1330,29 @@ def to_text_summary(c):
         for i in weapons:
             atk = i["attack"]
             flag = "" if atk.get("verified", True) else "  (! see JSON)"
-            lines.append(f"  {i['name']}: {fmt_mod(atk['to_hit'])} to hit, {atk['damage']}{flag}")
+            props = f"  [{', '.join(atk['properties'])}]" if atk.get("properties") else ""
+            rng = f"  range {atk['range']}/{atk['long_range']} ft" if atk.get("range") else ""
+            versatile = f"  (versatile: {atk['versatile_damage']})" if atk.get("versatile_damage") else ""
+            lines.append(f"  {i['name']}: {fmt_mod(atk['to_hit'])} to hit, {atk['damage']}{versatile}{props}{rng}{flag}")
+
+    other_actions = [a for a in c["actions"] if "attack" in a or "save" in a or "dice_roll" in a]
+    if other_actions:
+        lines.append("")
+        lines.append("Other Actions:")
+        for a in other_actions:
+            bits = []
+            if "attack" in a:
+                atk = a["attack"]
+                flag = " (! see JSON)" if not atk.get("verified", True) else ""
+                dmg = f", {atk['damage']}" if atk.get("damage") else ""
+                bits.append(f"{fmt_mod(atk['to_hit'])} to hit{dmg}{flag}")
+            if "dice_roll" in a:
+                bits.append(f"{a['dice_roll']['dice']} (see summary for what it's for)")
+            if "save" in a:
+                sv = a["save"]
+                flag = " (! see JSON)" if not sv.get("verified", True) else ""
+                bits.append(f"DC {sv['dc']} {sv['ability'] or '?'} save{flag}")
+            lines.append(f"  {a['name']}: " + "; ".join(bits))
 
     if c["spells"]:
         lines.append("")
@@ -1286,7 +1360,15 @@ def to_text_summary(c):
         for source, spell_list in c["spells"].items():
             lines.append(f"  From {source}:")
             for s in spell_list:
-                lines.append(f"    [{s['level']}] {s['name']}")
+                lines.append(f"    {format_spell_line(s)}")
+
+    if c["companions"]:
+        lines.append("")
+        lines.append("Companions:")
+        for comp in c["companions"]:
+            flag = "" if comp.get("verified", True) else "  (! unverified schema, see JSON)"
+            lines.append(f"  {comp['name']} ({comp.get('species_or_type')}){flag}")
+
     return "\n".join(lines)
 
 
