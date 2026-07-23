@@ -1004,6 +1004,7 @@
       "summary": "Sap. If you hit a creature with a Longsword, that creature has Disadvantage on its next attack roll before the start of your next turn."
     }
   ],
+  "companions": [],
   "notes": {},
   "computed_stats": {
     "passive_perception": 10,

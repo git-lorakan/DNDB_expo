@@ -1359,6 +1359,7 @@
       "summary": "Immediately after you make a D20 Test and roll a 1 on the d20, make a Wis. saving throw (DC 15). On a failed save, you have the Incapacitated condition until the start of your next turn, and must roll on the Shadow\u2019s Will table to determine what you do during that turn."
     }
   ],
+  "companions": [],
   "notes": {},
   "computed_stats": {
     "passive_perception": 10,

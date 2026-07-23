@@ -830,6 +830,63 @@ def gather_notes(data):
     return {k: v for k, v in notes.items() if v}
 
 
+def gather_companions(data):
+    """Beast companions/familiars from data.creatures - currently [] in all four exports
+    this script was tested against (none of Horns/Sin/Flare/Dorian has an active
+    companion), so this extraction has NOT been verified against a real populated entry.
+
+    It's written by analogy to conventions this schema uses consistently everywhere
+    else we've confirmed them (ability scores as a {id, value} list matching
+    ABILITY_NAMES; dice as {"diceString": ...}; prose under "description"/"snippet"),
+    which is a reasonable basis for a first draft, but is still a guess at the specific
+    field names and nesting a creature entry uses (e.g. whether stats live on the
+    creature itself or its "definition", what the HP/speed fields are called). Every
+    lookup below degrades to None/empty rather than raising if the real shape differs,
+    and the complete raw entry is kept under "raw" so nothing is lost if these guesses
+    turn out wrong - treat this as needing confirmation against a real companion export."""
+    companions = []
+    for creature in data.get("creatures") or []:
+        definition = creature.get("definition") or {}
+        custom_name = creature.get("name")
+        species = definition.get("name")
+
+        ability_scores = {}
+        for s in (definition.get("stats") or creature.get("stats") or []):
+            name = ABILITY_NAMES.get(s.get("id"))
+            if name and s.get("value") is not None:
+                ability_scores[name] = s["value"]
+
+        actions = []
+        for a in (definition.get("actions") or creature.get("actions") or []):
+            damage = a.get("damage")
+            damage_str = damage.get("diceString") if isinstance(damage, dict) else damage
+            actions.append({
+                "name": a.get("name"),
+                "description": strip_html(a.get("description") or a.get("snippet")),
+                "attack_bonus": a.get("attackBonus") or a.get("toHit"),
+                "damage": damage_str,
+            })
+
+        companions.append({
+            "name": custom_name or species,
+            "species_or_type": species,
+            "size": definition.get("size"),
+            "armor_class": definition.get("armorClass") or creature.get("armorClass"),
+            "hit_points": (definition.get("averageHitPoints") or definition.get("hitPoints")
+                           or creature.get("hitPoints")),
+            "speed": definition.get("speeds") or definition.get("weightSpeeds"),
+            "ability_scores": ability_scores,
+            "actions": actions,
+            "verified": False,
+            "note": ("No populated data.creatures entry exists in any of the four exports this "
+                     "script was tested against - these field names are a best-effort guess at "
+                     "DDB's creature schema, not a confirmed mapping. See 'raw' for the untouched "
+                     "source entry."),
+            "raw": creature,
+        })
+    return companions
+
+
 RESET_TYPES = {1: "Short Rest", 2: "Long Rest"}
 # Only resetType 2 (Long Rest) has a confirmed real example - every limited-use action
 # across all four exports this script was tested against (Arcane Recovery, Knowledge
@@ -1162,6 +1219,7 @@ def extract(raw):
         "spells": gather_spells(data),
         **gather_spell_slots(data),
         "actions": gather_actions(data, ability_scores, proficiency),
+        "companions": gather_companions(data),
         "notes": gather_notes(data),
         "computed_stats": gather_computed_stats(data, ability_scores, proficiency, proficiencies),
     }
