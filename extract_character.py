@@ -31,6 +31,17 @@ ALIGNMENTS = {
     7: "Lawful Evil", 8: "Neutral Evil", 9: "Chaotic Evil",
 }
 
+WEAPON_CATEGORY_SLUGS = {1: "simple-weapons", 2: "martial-weapons"}
+
+# Best-effort id->name table for data.actions[].damageTypeId, a common DDB convention.
+# Every action in the export this was written against has damageTypeId: null, so this
+# mapping is unverified against real data - treat any output that used it as a guess.
+DAMAGE_TYPE_IDS = {
+    1: "Bludgeoning", 2: "Piercing", 3: "Slashing", 4: "Necrotic", 5: "Acid",
+    6: "Cold", 7: "Fire", 8: "Force", 9: "Lightning", 10: "Poison",
+    11: "Psychic", 12: "Radiant", 13: "Thunder",
+}
+
 SKILL_ABILITY = {
     "acrobatics": "Dexterity", "animal-handling": "Wisdom", "arcana": "Intelligence",
     "athletics": "Strength", "deception": "Charisma", "history": "Intelligence",
@@ -153,6 +164,21 @@ def iter_modifiers(data):
     for category, mods in (data.get("modifiers") or {}).items():
         for m in mods:
             yield category, m
+
+
+def slugify(name):
+    """Match DDB's subType slug convention (e.g. "Calligrapher's Supplies" ->
+    "calligraphers-supplies", "Simple Weapons" -> "simple-weapons")."""
+    name = (name or "").replace("'", "").replace("’", "")
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def gather_proficiency_subtype_slugs(data):
+    """Raw (non-prettified) subType strings for every 'proficiency' modifier. Used to
+    match a specific weapon against either a category-level proficiency
+    ("simple-weapons"/"martial-weapons") or an individually granted one (e.g. "rapier")."""
+    return {m.get("subType") for _category, m in iter_modifiers(data)
+            if m.get("type") == "proficiency" and m.get("subType")}
 
 
 def gather_ability_scores(data):
@@ -442,11 +468,75 @@ def gather_feats(data, choice_index, proficiency, ability_scores):
     return feats
 
 
-def gather_inventory(data):
+def compute_weapon_attack(d, ability_scores, proficiency, weapon_proficiency_slugs):
+    """Build a ready-to-use attack line for a weapon item definition: to-hit bonus,
+    damage, and its properties/range. Finesse uses the higher of Str/Dex per 5e rules;
+    otherwise melee uses Str and a genuinely ranged weapon (attackType 2) uses Dex."""
+    properties = [p.get("name") for p in (d.get("properties") or []) if p.get("name")]
+    str_mod = ability_scores["Strength"]["modifier"]
+    dex_mod = ability_scores["Dexterity"]["modifier"]
+
+    if "Finesse" in properties:
+        ability_used, ability_mod = (("Dexterity", dex_mod) if dex_mod >= str_mod else ("Strength", str_mod))
+    elif d.get("attackType") == 2:
+        ability_used, ability_mod = "Dexterity", dex_mod
+    else:
+        ability_used, ability_mod = "Strength", str_mod
+
+    category_slug = WEAPON_CATEGORY_SLUGS.get(d.get("categoryId"))
+    type_slug = slugify(d.get("type") or d.get("name"))
+    proficient = bool(
+        (category_slug and category_slug in weapon_proficiency_slugs) or
+        (type_slug in weapon_proficiency_slugs)
+    )
+
+    magic_bonus = 0
+    magic_bonus_verified = True
+    for gm in d.get("grantedModifiers") or []:
+        if gm.get("type") == "bonus" and (gm.get("subType") or "") == "magic":
+            magic_bonus += gm.get("value") or 0
+    if d.get("magic") and magic_bonus == 0:
+        # Item is flagged magic but no "magic" bonus modifier was found on it - rather
+        # than silently computing a mundane attack line for a magic weapon, say so.
+        magic_bonus_verified = False
+
+    to_hit = ability_mod + (proficiency if proficient else 0) + magic_bonus
+
+    damage_dice = (d.get("damage") or {}).get("diceString")
+    damage = None
+    if damage_dice:
+        total_damage_mod = ability_mod + magic_bonus
+        sign = "+" if total_damage_mod >= 0 else "-"
+        damage = f"{damage_dice}{sign}{abs(total_damage_mod)} {d.get('damageType') or ''}".strip()
+
+    versatile_damage = next((p.get("notes") for p in (d.get("properties") or [])
+                              if p.get("name") == "Versatile" and p.get("notes")), None)
+
+    attack = {
+        "ability_used": ability_used,
+        "proficient": proficient,
+        "to_hit": to_hit,
+        "damage": damage,
+        "versatile_damage": versatile_damage,
+        "properties": properties,
+        "range": d.get("range"),
+        "long_range": d.get("longRange"),
+    }
+    if magic_bonus:
+        attack["magic_bonus"] = magic_bonus
+    if not magic_bonus_verified:
+        attack["verified"] = False
+        attack["note"] = (f"{d.get('name')} is flagged as a magic item but no 'magic' bonus "
+                           "modifier was found on it, so no +N was added to this attack line - "
+                           "recheck this item's grantedModifiers before trusting the to-hit/damage.")
+    return attack
+
+
+def gather_inventory(data, ability_scores, proficiency, weapon_proficiency_slugs):
     items = []
     for item in data.get("inventory", []):
         d = item.get("definition") or {}
-        items.append({
+        entry = {
             "name": d.get("name"),
             "quantity": item.get("quantity"),
             "equipped": item.get("equipped", False),
@@ -458,7 +548,10 @@ def gather_inventory(data):
             "damage": (d.get("damage") or {}).get("diceString"),
             "damage_type": d.get("damageType"),
             "armor_class": d.get("armorClass"),
-        })
+        }
+        if d.get("filterType") == "Weapon" or entry["damage"]:
+            entry["attack"] = compute_weapon_attack(d, ability_scores, proficiency, weapon_proficiency_slugs)
+        items.append(entry)
     return items
 
 
@@ -514,6 +607,97 @@ def gather_traits(data):
 def gather_notes(data):
     notes = data.get("notes") or {}
     return {k: v for k, v in notes.items() if v}
+
+
+def build_class_level_by_entity_type(data):
+    """Map a class feature's shared entityTypeId (e.g. 12168134 for every Wizard
+    class-feature/action) to that class's current level, so gather_actions can resolve
+    {{classlevel}} placeholders on data.actions.class entries the same way gather_classes
+    already does for the classFeatures list."""
+    mapping = {}
+    for c in data.get("classes", []):
+        level = c.get("level", 0)
+        for feat in c.get("classFeatures", []):
+            fdef = feat.get("definition", feat)
+            entity_type_id = fdef.get("entityTypeId")
+            if entity_type_id is not None:
+                mapping[entity_type_id] = level
+    return mapping
+
+
+def gather_actions(data, ability_scores, proficiency):
+    """Surface data.actions (race/class/background/item/feat) and data.customActions -
+    these carry precomputed attack/save mechanics (unarmed strikes, class features with
+    an attack roll or save DC, etc.) that gather_inventory's weapon-only pass can't see.
+
+    Every action in the export this was written against has attackTypeRange/dice/
+    saveStatId/fixedSaveDc all null (they're all utility/reference features, not actual
+    attacks), so the attack/save-block construction below is logically straightforward
+    but untested against a populated real example - flagged accordingly whenever it
+    actually fires."""
+    class_level_by_entity_type = build_class_level_by_entity_type(data)
+
+    actions = []
+    action_lists = list((data.get("actions") or {}).items())
+    action_lists.append(("custom", data.get("customActions") or []))
+
+    for source_category, entries in action_lists:
+        for a in entries or []:
+            name = a.get("name")
+            if not name:
+                continue
+            classlevel = (class_level_by_entity_type.get(a.get("componentTypeId"))
+                          if source_category == "class" else None)
+            summary = render_templates(strip_html(a.get("snippet") or a.get("description")),
+                                        proficiency, classlevel=classlevel, ability_scores=ability_scores)
+            entry = {"name": name, "source_category": source_category, "summary": summary}
+
+            is_attack = a.get("attackTypeRange") is not None or a.get("dice") is not None
+            is_save = a.get("saveStatId") is not None or a.get("fixedSaveDc") is not None
+            if not (is_attack or is_save):
+                actions.append(entry)
+                continue
+
+            ability_id = a.get("abilityModifierStatId")
+            ability_name = ABILITY_NAMES.get(ability_id) if ability_id else None
+            ability_mod = ability_scores.get(ability_name, {}).get("modifier", 0) if ability_name else 0
+
+            if is_attack:
+                to_hit = a.get("fixedToHit")
+                if to_hit is None:
+                    to_hit = ability_mod + (proficiency if a.get("isProficient") else 0)
+                dice = a.get("dice") or {}
+                damage_type = DAMAGE_TYPE_IDS.get(a.get("damageTypeId"))
+                damage = None
+                if dice.get("diceString"):
+                    sign = "+" if ability_mod >= 0 else "-"
+                    damage = f"{dice['diceString']}{sign}{abs(ability_mod)}"
+                    if damage_type:
+                        damage += f" {damage_type}"
+                entry["attack"] = {
+                    "attack_type": {1: "Melee", 2: "Ranged"}.get(a.get("attackTypeRange"), a.get("attackTypeRange")),
+                    "ability_used": ability_name,
+                    "to_hit": to_hit,
+                    "damage": damage,
+                    "verified": False,
+                    "note": ("This action's attack fields (attackTypeRange/dice/damageTypeId) had no "
+                             "populated real example in the export this script was written against - "
+                             "the field mappings used here (e.g. damageTypeId -> damage type name) are "
+                             "best-effort and unverified. Recheck against source rules before trusting this."),
+                }
+            if is_save:
+                save_dc = a.get("fixedSaveDc")
+                if save_dc is None:
+                    save_dc = 8 + proficiency + ability_mod
+                entry["save"] = {
+                    "ability": ability_name,
+                    "dc": save_dc,
+                    "verified": False,
+                    "note": ("This action's save fields (saveStatId/fixedSaveDc) had no populated real "
+                              "example in the export this script was written against - recheck before trusting this."),
+                }
+            actions.append(entry)
+    return actions
 
 
 def gather_computed_stats(data, ability_scores, proficiency, proficiencies):
@@ -603,6 +787,7 @@ def extract(raw):
     ability_scores = gather_ability_scores(data)
     proficiencies = gather_proficiencies(data)
     choice_index = build_choice_index(data)
+    weapon_proficiency_slugs = gather_proficiency_subtype_slugs(data)
 
     character = {
         "name": data.get("name"),
@@ -631,9 +816,10 @@ def extract(raw):
         "feats": gather_feats(data, choice_index, proficiency, ability_scores),
         "personality": gather_traits(data),
         "currency": data.get("currencies"),
-        "inventory": gather_inventory(data),
+        "inventory": gather_inventory(data, ability_scores, proficiency, weapon_proficiency_slugs),
         "spells": gather_spells(data),
         **gather_spell_slots(data),
+        "actions": gather_actions(data, ability_scores, proficiency),
         "notes": gather_notes(data),
         "computed_stats": gather_computed_stats(data, ability_scores, proficiency, proficiencies),
     }
@@ -676,6 +862,16 @@ def to_text_summary(c):
     for item in c["inventory"]:
         flag = " (equipped)" if item["equipped"] else ""
         lines.append(f"  {item['quantity']}x {item['name']}{flag}")
+
+    weapons = [i for i in c["inventory"] if i.get("attack")]
+    if weapons:
+        lines.append("")
+        lines.append("Attacks:")
+        for i in weapons:
+            atk = i["attack"]
+            flag = "" if atk.get("verified", True) else "  (! see JSON)"
+            lines.append(f"  {i['name']}: {fmt_mod(atk['to_hit'])} to hit, {atk['damage']}{flag}")
+
     if c["spells"]:
         lines.append("")
         lines.append("Spells:")
