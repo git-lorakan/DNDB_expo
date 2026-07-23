@@ -21,6 +21,9 @@
     "speed": {
       "walk": 30
     },
+    "senses": {
+      "darkvision": 60
+    },
     "traits": [
       {
         "name": "Celestial Resistance",
@@ -32,7 +35,16 @@
       },
       {
         "name": "Healing Hands",
-        "summary": "Once per Long Rest as a Magic action, you touch a creature and they regain 2d4 HP."
+        "summary": "Once per Long Rest as a Magic action, you touch a creature and they regain 2d4 HP.",
+        "resources": [
+          {
+            "action_name": "Healing Hands",
+            "max_uses": 1,
+            "uses_remaining": 1,
+            "number_used": 0,
+            "reset_type": "Long Rest"
+          }
+        ]
       },
       {
         "name": "Light Bearer",
@@ -40,7 +52,7 @@
       },
       {
         "name": "Celestial Revelation",
-        "summary": "Once per Long Rest, you transform using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required).\r\n\r\nOnce on each of your turns before the transformation ends, you can deal 2 extra damage (Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance) to one target when you deal damage to it with an attack or a spell.\r\n\r\nHeavenly Wings. You have a Fly Speed equal to your Speed.\r\n\r\nInner Radiance. You shed Bright Light in a 10-ft. radius and Dim Light for an additional 10 ft., and at the end of each of your turns, each creature within 10 ft. of you takes 2 Radiant damage.\r\n\r\nNecrotic Shroud. Creatures other than your allies within 10 ft. of you must succeed on a Cha. saving throw (DC {{savedc:cha}}) or have the Frightened condition until the end of your next turn."
+        "summary": "Once per Long Rest, you transform using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required).\r\n\r\nOnce on each of your turns before the transformation ends, you can deal 2 extra damage (Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance) to one target when you deal damage to it with an attack or a spell.\r\n\r\nHeavenly Wings. You have a Fly Speed equal to your Speed.\r\n\r\nInner Radiance. You shed Bright Light in a 10-ft. radius and Dim Light for an additional 10 ft., and at the end of each of your turns, each creature within 10 ft. of you takes 2 Radiant damage.\r\n\r\nNecrotic Shroud. Creatures other than your allies within 10 ft. of you must succeed on a Cha. saving throw (DC 10) or have the Frightened condition until the end of your next turn."
       },
       {
         "name": "Creature Type",
@@ -62,10 +74,12 @@
   },
   "background": {
     "name": "Scribe",
+    "description": "Ability Scores:\u00a0Dexterity, Intelligence, Wisdom\nFeat:\u00a0Skilled\nSkill Proficiencies: Investigation and Perception\nTool Proficiency:\u00a0Calligrapher's Tools\nEquipment: Choose A or B: (A) Calligrapher's Supplies, Fine Clothes, Lamp, Oil, Parchment (12 sheets), 23 GP; or (B) 50 GP\n\r\nYou spent formative years in a scriptorium, a monastery dedicated to the preservation of knowledge, or a government agency, where you learned to write with a clear hand and produce finely written texts. Perhaps you scribed government documents or copied tomes of literature. You might have some skill as a writer of poetry, narrative, or scholarly research. Above all, you have a careful attention to detail, helping you avoid introducing mistakes to the documents you copy and create.",
     "skill_proficiencies": "Investigation and Perception",
     "tool_proficiencies": "Calligrapher's Supplies",
     "languages": "",
-    "feature_name": "Skilled"
+    "feature_name": "Skilled",
+    "feature_description": "You gain proficiency in any combination of three skills or tools of your choice.\r\n\r\nRepeatable. You can take this feat more than once."
   },
   "classes": [
     {
@@ -143,49 +157,150 @@
     "current": 8,
     "temporary": 0
   },
+  "hit_dice": {
+    "d8": 1
+  },
   "speed": {
     "walk": 30
   },
+  "senses": {
+    "darkvision": 60
+  },
   "proficiencies": {
-    "saving_throws": [
-      "Charisma",
-      "Wisdom"
-    ],
+    "saving_throws": {
+      "Strength": {
+        "proficient": false,
+        "bonus": 0
+      },
+      "Dexterity": {
+        "proficient": false,
+        "bonus": 0
+      },
+      "Constitution": {
+        "proficient": false,
+        "bonus": 2
+      },
+      "Intelligence": {
+        "proficient": false,
+        "bonus": 2
+      },
+      "Wisdom": {
+        "proficient": true,
+        "bonus": 5
+      },
+      "Charisma": {
+        "proficient": true,
+        "bonus": 2
+      }
+    },
     "skills": {
+      "Acrobatics": {
+        "ability": "Dexterity",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Animal Handling": {
+        "ability": "Wisdom",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 3
+      },
       "Arcana": {
         "ability": "Intelligence",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 4
+      },
+      "Athletics": {
+        "ability": "Strength",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Deception": {
+        "ability": "Charisma",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
       },
       "History": {
         "ability": "Intelligence",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 4
       },
       "Insight": {
         "ability": "Wisdom",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 5
+      },
+      "Intimidation": {
+        "ability": "Charisma",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
       },
       "Investigation": {
         "ability": "Intelligence",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 4
+      },
+      "Medicine": {
+        "ability": "Wisdom",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 3
       },
       "Nature": {
         "ability": "Intelligence",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 4
       },
       "Perception": {
         "ability": "Wisdom",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 5
+      },
+      "Performance": {
+        "ability": "Charisma",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Persuasion": {
+        "ability": "Charisma",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
       },
       "Religion": {
         "ability": "Intelligence",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 4
+      },
+      "Sleight Of Hand": {
+        "ability": "Dexterity",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Stealth": {
+        "ability": "Dexterity",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Survival": {
+        "ability": "Wisdom",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 3
       }
     },
     "tools": [
@@ -297,7 +412,16 @@
           "Insight",
           "Infernal"
         ]
-      }
+      },
+      "resources": [
+        {
+          "action_name": "Symbiotic Being: Sustained Symbiosis",
+          "max_uses": 2,
+          "uses_remaining": 2,
+          "number_used": 0,
+          "reset_type": "Long Rest"
+        }
+      ]
     }
   ],
   "personality": {},
@@ -346,7 +470,19 @@
       "rarity": "Common",
       "damage": "1d6",
       "damage_type": "Bludgeoning",
-      "armor_class": null
+      "armor_class": null,
+      "attack": {
+        "ability_used": "Strength",
+        "proficient": true,
+        "to_hit": 2,
+        "damage": "1d6+0 Bludgeoning",
+        "versatile_damage": null,
+        "properties": [
+          "Sap"
+        ],
+        "range": 5,
+        "long_range": 5
+      }
     },
     {
       "name": "Backpack",
@@ -461,7 +597,37 @@
         "school": "Evocation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 1,
+          "unit": "Hour"
+        },
+        "components": {
+          "types": [
+            "V",
+            "M"
+          ],
+          "material_cost": "a firefly or phosphorescent moss"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You touch one Large or smaller object that isn\u2019t being worn or carried by someone else. Until the spell ends, the object sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. The light can be colored as you like.\n\r\nCovering the object with something opaque blocks the light. The spell ends if you cast it again.",
+        "scale_type": "characterlevel",
+        "effects": [],
+        "other_scaling": {}
       }
     ],
     "class": [
@@ -471,7 +637,37 @@
         "school": "Evocation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 1,
+          "unit": "Hour"
+        },
+        "components": {
+          "types": [
+            "V",
+            "M"
+          ],
+          "material_cost": "a firefly or phosphorescent moss"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You touch one Large or smaller object that isn\u2019t being worn or carried by someone else. Until the spell ends, the object sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. The light can be colored as you like.\n\r\nCovering the object with something opaque blocks the light. The spell ends if you cast it again.",
+        "scale_type": "characterlevel",
+        "effects": [],
+        "other_scaling": {}
       }
     ],
     "Cleric": [
@@ -481,7 +677,44 @@
         "school": "Divination",
         "concentration": true,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Concentration",
+          "interval": 1,
+          "unit": "Minute"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You touch a willing creature and choose a skill. Until the spell ends, the creature adds 1d4 to any ability check using the chosen skill.",
+        "scale_type": "characterlevel",
+        "effects": [
+          {
+            "type": "Bonus",
+            "subtype": "Ability Checks",
+            "base_amount": "1d4",
+            "scaling": []
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Sacred Flame",
@@ -489,7 +722,57 @@
         "school": "Evocation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 60,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": true,
+        "save_ability": "Dexterity",
+        "description": "Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take 1d8 Radiant damage. The target gains no benefit from Half Cover or Three-Quarters Cover for this save.\n\r\nCantrip Upgrade. The damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).",
+        "scale_type": "characterlevel",
+        "effects": [
+          {
+            "type": "Damage",
+            "subtype": "Radiant",
+            "base_amount": "1d8",
+            "scaling": [
+              {
+                "level": 5,
+                "amount": "2d8"
+              },
+              {
+                "level": 11,
+                "amount": "3d8"
+              },
+              {
+                "level": 17,
+                "amount": "4d8"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Spare the Dying",
@@ -497,7 +780,61 @@
         "school": "Necromancy",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 15,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "Choose a creature within range that has 0 Hit Points and isn\u2019t dead. The creature becomes Stable.\n\r\nCantrip Upgrade. The range doubles when you reach levels 5 (30 feet), 11 (60 feet), and 17 (120 feet).",
+        "scale_type": "characterlevel",
+        "effects": [],
+        "other_scaling": {
+          "higherLevelDefinitions": [
+            {
+              "level": 5,
+              "typeId": 17,
+              "dice": null,
+              "value": 0,
+              "details": "The range increases to 30 feet."
+            },
+            {
+              "level": 11,
+              "typeId": 17,
+              "dice": null,
+              "value": 0,
+              "details": "The range increases to 60 feet."
+            },
+            {
+              "level": 17,
+              "typeId": 17,
+              "dice": null,
+              "value": 0,
+              "details": "The range increases to 120 feet."
+            }
+          ]
+        }
       },
       {
         "name": "Bane",
@@ -505,7 +842,48 @@
         "school": "Enchantment",
         "concentration": true,
         "ritual": false,
-        "prepared": true
+        "prepared": true,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 30,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Concentration",
+          "interval": 1,
+          "unit": "Minute"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "a drop of blood"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": true,
+        "save_ability": "Charisma",
+        "description": "Up to three creatures of your choice that you can see within range must each make a Charisma saving throw. Whenever a target that fails this save makes an attack roll or a saving throw before the spell ends, the target must subtract 1d4 from the attack roll or save.\n\r\nUsing a Higher-Level Spell Slot. You can target one additional creature for each spell slot level above 1.",
+        "scale_type": "spellscale",
+        "effects": [],
+        "other_scaling": {
+          "higherLevelDefinitions": [
+            {
+              "level": 1,
+              "typeId": 1,
+              "dice": null,
+              "value": 1,
+              "details": ""
+            }
+          ]
+        }
       },
       {
         "name": "Cure Wounds",
@@ -513,7 +891,49 @@
         "school": "Abjuration",
         "concentration": false,
         "ritual": false,
-        "prepared": true
+        "prepared": true,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "A creature you touch regains a number of Hit Points equal to 2d8 plus your spellcasting ability modifier.\n\r\nUsing a Higher-Level Spell Slot. The healing increases by 2d8 for each spell slot level above 1.",
+        "scale_type": "spellscale",
+        "effects": [
+          {
+            "type": "Bonus",
+            "subtype": "Hit Points",
+            "base_amount": "2d8",
+            "scaling": [
+              {
+                "level": 1,
+                "amount": "2d8"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Guiding Bolt",
@@ -521,7 +941,49 @@
         "school": "Evocation",
         "concentration": false,
         "ritual": false,
-        "prepared": true
+        "prepared": true,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 120,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 1,
+          "unit": "Round"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": true,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You hurl a bolt of light toward a creature within range. Make a ranged spell attack against the target. On a hit, it takes 4d6 Radiant damage, and the next attack roll made against it before the end of your next turn has Advantage.\n\r\nUsing a Higher-Level Spell Slot. The damage increases by 1d6 for each spell slot level above 1.",
+        "scale_type": "spellscale",
+        "effects": [
+          {
+            "type": "Damage",
+            "subtype": "Radiant",
+            "base_amount": "4d6",
+            "scaling": [
+              {
+                "level": 1,
+                "amount": "1d6"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Healing Word",
@@ -529,10 +991,114 @@
         "school": "Abjuration",
         "concentration": false,
         "ritual": false,
-        "prepared": true
+        "prepared": true,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Bonus Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 60,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "A creature of your choice that you can see within range regains Hit Points equal to 2d4 plus your spellcasting ability modifier.\n\r\nUsing a Higher-Level Spell Slot. The healing increases by 2d4 for each spell slot level above 1.",
+        "scale_type": "spellscale",
+        "effects": [
+          {
+            "type": "Bonus",
+            "subtype": "Hit Points",
+            "base_amount": "2d4",
+            "scaling": [
+              {
+                "level": 1,
+                "amount": "2d4"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       }
     ]
   },
+  "actions": [
+    {
+      "name": "Healing Hands",
+      "source_category": "race",
+      "summary": "Once per Long Rest as a Magic action, you touch a creature and they regain 2d4 HP.",
+      "dice_roll": {
+        "dice": "2d4",
+        "damage_type_id": null,
+        "note": "No attack roll of its own - see the summary text for what this roll is for."
+      }
+    },
+    {
+      "name": "Initiate a Circle Spell",
+      "source_category": "class",
+      "summary": "You take a Magic action to initiate casting a Circle spell. When you do so, choose which Circle casting option you\u2019re using for this casting; you must also meet any of the other requirements described in that option\u2019s text. Until the Circle spell\u2019s casting is complete, you must maintain Concentration on the spell."
+    },
+    {
+      "name": "Circle Spell: Augment",
+      "source_category": "class",
+      "summary": "When you cast a spell with a range of at least 5 ft., you can increase the range of the spell by 1,000 ft. per secondary caster contributing to the spell, up to a max of a 1-mile increase."
+    },
+    {
+      "name": "Circle Spell: Distribute",
+      "source_category": "class",
+      "summary": "When you cast a spell that requires Concentration, you can distribute the mental load of the spell among you and the secondary casters. Once the casting is complete, you and all secondary casters can maintain Concentration on this spell. As long as at least one caster who contributed to the spell maintains this Concentration, the spell\u2019s effects remain active."
+    },
+    {
+      "name": "Circle Spell: Expand",
+      "source_category": "class",
+      "summary": "When you cast a spell that creates an area of effect, you can increase one dimension of the spell\u2019s area of effect for this casting by 10 ft. per secondary caster contributing to the spell. \r\n\r\nEach secondary caster contributing to the spell must expend a spell slot (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Circle Spell: Prolong",
+      "source_category": "class",
+      "summary": "When you cast a spell that has a duration of 1 min or longer, you can increase the duration of the spell depending on the number of secondary casters contributing to the spell.\r\n\r\nEach secondary caster contributing to the spell must expend a spell slot (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Circle Spell: Safeguard",
+      "source_category": "class",
+      "summary": "When you cast a spell that creates an area of effect, you can carve out a safe zone within that area of effect that is unaffected by the spell for its duration. This safe zone consists of a number of 5-ft. Cubes equal to 0 + the number of secondary casters contributing to the spell (min of 1 Cube). You can arrange the Cubes as you like, but each Cube must be contiguous with at least one other Cube.\r\n\r\nIf the spell\u2019s area of effect can be moved, the safe zone moves with it."
+    },
+    {
+      "name": "Circle Spell: Supplant",
+      "source_category": "class",
+      "summary": "When you cast a spell that requires at least one Material component with a specified cost that is consumed by the spell, you can reduce the min cost of one such Material component by 50 GP per each secondary caster contributing to the spell.\r\n\r\nEach secondary caster contributing to the spell must expend a spell slot of a level greater than or equal to the spell\u2019s level (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Symbiotic Being: Sustained Symbiosis",
+      "source_category": "feat",
+      "summary": "When you fail a saving throw, you can take a Reaction and expend one of your Hit Dice. Roll the die and add the number rolled to the saving throw. You can use this feature 2 times per Long Rest."
+    },
+    {
+      "name": "Symbiotic Being: Symbiotic Agenda",
+      "source_category": "feat",
+      "summary": "Immediately after you make a D20 Test and roll a 1 on the d20, make a Cha. saving throw (DC 15). On a failed save, you have the Charmed condition for 1d12 hours. While Charmed, you must try to follow the symbiote\u2019s commands and further its goals. Whenever you take damage, you can repeat this save, ending the effect on a success. You might make this saving throw whenever you act contrary to the symbiote\u2019s agenda (DM\u2019s discretion).",
+      "dice_roll": {
+        "dice": "1d12",
+        "damage_type_id": null,
+        "note": "No attack roll of its own - see the summary text for what this roll is for."
+      }
+    }
+  ],
+  "companions": [],
   "notes": {},
   "computed_stats": {
     "passive_perception": 15,
@@ -549,6 +1115,14 @@
         "spell_save_dc": 13,
         "spell_attack_bonus": 5
       }
-    ]
+    ],
+    "encumbrance": {
+      "total_weight_carried": 60.0,
+      "carrying_capacity": 150,
+      "encumbered_at": 50,
+      "heavily_encumbered_at": 100,
+      "coin_weight_included": false,
+      "ddb_encumbrance_setting": 1
+    }
   }
 }
