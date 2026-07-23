@@ -1,0 +1,556 @@
+{
+  "name": "Flare",
+  "gender": "Female",
+  "alignment": "Chaotic Good",
+  "faith": null,
+  "age": 22,
+  "appearance": {
+    "hair": "Blonde",
+    "eyes": "Green",
+    "skin": "Ivory",
+    "height": "5'",
+    "weight": 125
+  },
+  "level": 1,
+  "proficiency_bonus": 2,
+  "experience_points": 0,
+  "inspiration": false,
+  "race": {
+    "name": "Aasimar",
+    "size": "Medium",
+    "speed": {
+      "walk": 30
+    },
+    "traits": [
+      {
+        "name": "Celestial Resistance",
+        "summary": "You have Resistance to Necrotic & Radiant damage."
+      },
+      {
+        "name": "Darkvision",
+        "summary": "You have Darkvision with a range of 60 ft."
+      },
+      {
+        "name": "Healing Hands",
+        "summary": "Once per Long Rest as a Magic action, you touch a creature and they regain 2d4 HP."
+      },
+      {
+        "name": "Light Bearer",
+        "summary": "You know the Light cantrip and Charisma is your spellcasting ability for it."
+      },
+      {
+        "name": "Celestial Revelation",
+        "summary": "Once per Long Rest, you transform using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required).\r\n\r\nOnce on each of your turns before the transformation ends, you can deal 2 extra damage (Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance) to one target when you deal damage to it with an attack or a spell.\r\n\r\nHeavenly Wings. You have a Fly Speed equal to your Speed.\r\n\r\nInner Radiance. You shed Bright Light in a 10-ft. radius and Dim Light for an additional 10 ft., and at the end of each of your turns, each creature within 10 ft. of you takes 2 Radiant damage.\r\n\r\nNecrotic Shroud. Creatures other than your allies within 10 ft. of you must succeed on a Cha. saving throw (DC {{savedc:cha}}) or have the Frightened condition until the end of your next turn."
+      },
+      {
+        "name": "Creature Type",
+        "summary": "You are a Humanoid."
+      },
+      {
+        "name": "Celestial Revelation",
+        "summary": "Once per Long Rest, you transform using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required).\r\n\r\nActivate Celestial Revelation by clicking on this trait and select one of the options available to you. Deselect it to stop its effects."
+      },
+      {
+        "name": "Ability Score Increases",
+        "summary": "When determining your character\u2019s ability scores, increase one score by 2 and a different one by 1, or increase three scores by 1.",
+        "choice": {
+          "status": "unresolved_in_source",
+          "picks": []
+        }
+      }
+    ]
+  },
+  "background": {
+    "name": "Scribe",
+    "skill_proficiencies": "Investigation and Perception",
+    "tool_proficiencies": "Calligrapher's Supplies",
+    "languages": "",
+    "feature_name": "Skilled"
+  },
+  "classes": [
+    {
+      "name": "Cleric",
+      "level": 1,
+      "subclass": null,
+      "hit_die": "d8",
+      "is_starting_class": true,
+      "features_gained": [
+        {
+          "name": "Core Cleric Traits",
+          "summary": "As a Level 1 Character:\n\r\n\r\nGain all the traits in the Core Cleric Traits table.\r\nGain the Cleric\u2019s level 1 features, which are listed in the Cleric Features table.\r\n\r\nCore Cleric Traits\r\n\r\n\r\nPrimary Ability\r\nWisdom\r\n\r\n\r\nHit Point Die\r\nD8 per Cleric level\r\n\r\n\r\nSaving Throw Proficiencies\r\nWisdom and Charisma\r\n\r\n\r\nSkill Proficiencies\r\nChoose 2: History, Insight, Medicine, Persuasion, or Religion\r\n\r\n\r\nWeapon Proficiencies\r\nSimple weapons\r\n\r\n\r\nArmor Training\r\nLight and Medium armor and Shields\r\n\r\n\r\nStarting Equipment\r\nChoose A or B: (A) Chain Shirt, Shield, Mace, Holy Symbol, Priest\u2019s Pack, and 7 GP; or (B) 110 GP",
+          "choice": {
+            "status": "resolved",
+            "picks": [
+              "History",
+              "Religion"
+            ]
+          }
+        },
+        {
+          "name": "Spellcasting",
+          "summary": "You have learned to cast spells through prayer and meditation. The information below details how you use those rules with Cleric spells, which appear on the Cleric spell list.\n\r\nCantrips. You know three cantrips of your choice from the Cleric spell list.\n\r\nWhenever you gain a Cleric level, you can replace one of your cantrips with another cantrip of your choice from the Cleric spell list.\n\r\nWhen you reach Cleric levels 4 and 10, you learn another cantrip of your choice from the Cleric spell list, as shown in the Cantrips column of the Cleric Features table.\n\r\nSpell Slots. The Cleric Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended slots when you finish a Long Rest.\n\r\nPrepared Spells of Level 1+. You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose four level 1 spells from the Cleric spell list.\n\r\nThe number of spells on your list increases as you gain Cleric levels, as shown in the Prepared Spells column of the Cleric Features table. Whenever that number increases, choose additional spells from the Cleric spell list until the number of spells on your list matches the number on the table. The chosen spells must be of a level for which you have spell slots. For example, if you\u2019re a level 3 Cleric, your list of prepared spells can include six spells of levels 1 and 2 in any combination.\n\r\nIf another Cleric feature gives you spells that you always have prepared, those spells don\u2019t count against the number of spells you can prepare with this feature, but those spells otherwise count as Cleric spells for you.\n\r\nChanging Your Prepared Spells. Whenever you finish a Long Rest, you can change your list of prepared spells, replacing any of the spells there with other Cleric spells for which you have spell slots.\n\r\nSpellcasting Ability. Wisdom is your spellcasting ability for your Cleric spells.\n\r\nSpellcasting Focus. You can use a Holy Symbol as a Spellcasting Focus for your Cleric spells."
+        },
+        {
+          "name": "Divine Order",
+          "summary": "You have dedicated yourself to one of the following sacred roles of your choice.",
+          "choice": {
+            "status": "resolved",
+            "picks": [
+              "Thaumaturge",
+              "Light"
+            ]
+          }
+        }
+      ],
+      "pending_choices": [
+        {
+          "name": "Cleric Subclass",
+          "required_level": 3,
+          "status": "not_yet_available",
+          "picks": []
+        }
+      ]
+    }
+  ],
+  "ability_scores": {
+    "Strength": {
+      "score": 10,
+      "modifier": 0
+    },
+    "Dexterity": {
+      "score": 10,
+      "modifier": 0
+    },
+    "Constitution": {
+      "score": 14,
+      "modifier": 2
+    },
+    "Intelligence": {
+      "score": 14,
+      "modifier": 2
+    },
+    "Wisdom": {
+      "score": 17,
+      "modifier": 3
+    },
+    "Charisma": {
+      "score": 10,
+      "modifier": 0
+    }
+  },
+  "hit_points": {
+    "max": 8,
+    "current": 8,
+    "temporary": 0
+  },
+  "speed": {
+    "walk": 30
+  },
+  "proficiencies": {
+    "saving_throws": [
+      "Charisma",
+      "Wisdom"
+    ],
+    "skills": {
+      "Arcana": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      },
+      "History": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      },
+      "Insight": {
+        "ability": "Wisdom",
+        "proficient": true,
+        "expertise": false
+      },
+      "Investigation": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      },
+      "Nature": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      },
+      "Perception": {
+        "ability": "Wisdom",
+        "proficient": true,
+        "expertise": false
+      },
+      "Religion": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      }
+    },
+    "tools": [
+      "Alchemist's Supplies",
+      "Calligrapher's Supplies"
+    ],
+    "weapons": [
+      "Simple Weapons"
+    ],
+    "armor": [
+      "Light Armor",
+      "Medium Armor",
+      "Shields"
+    ],
+    "languages": [
+      "Common",
+      "Elvish",
+      "Goblin",
+      "Infernal"
+    ],
+    "damage_resistances": [
+      "Necrotic",
+      "Radiant"
+    ]
+  },
+  "feats": [
+    {
+      "name": "Scribe Ability Score Improvements",
+      "summary": "The Scribe Background allows you to choose between Dexterity, Intelligence, and Wisdom. Increase one of these scores by 2 and another one by 1, or increase all three by 1. None of these increases can raise a score above 20.",
+      "is_origin_feat": false,
+      "tags": [
+        "__INITIAL_ASI",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "resolved",
+        "picks": [
+          "Increase two scores (+2 / +1)",
+          "Wisdom Score",
+          "Intelligence Score"
+        ]
+      }
+    },
+    {
+      "name": "Skilled",
+      "summary": "You gain proficiency in any combination of three skills or tools of your choice.\r\n\r\nRepeatable. You can take this feat more than once.",
+      "is_origin_feat": true,
+      "tags": [
+        "Origin"
+      ],
+      "choice": {
+        "status": "resolved",
+        "picks": [
+          "Arcana",
+          "Nature",
+          "Alchemist's Supplies"
+        ]
+      }
+    },
+    {
+      "name": "Dark Bargain",
+      "summary": "At your GM's discretion, you have taken a Dark Bargain.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Character Threads",
+      "summary": "Threads are aspects added to characters at any time during their career that have a specific short or long-term goal.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Runestones",
+      "summary": "At the beginning of the Northlands Sagas adventure path, each player should draw one Runestone randomly.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Symbiotic Being",
+      "summary": "Entwined Existence. The symbiote can\u2019t be targeted. If you die, so does your symbiote. If you are returned to life, your symbiote also revives.\r\n\r\nSecond Mind. You gain proficiency in a skill, and also know one additional language of your choice.\r\n\r\nSustained Symbiosis. When you fail a saving throw, you can take a Reaction and expend one of your Hit Dice. Roll the die and add the number rolled to the saving throw. You can use this feature 2 times per Long Rest.\r\n\r\nSymbiotic Agenda. Immediately after you make a D20 Test and roll a 1 on the d20, make a Cha. saving throw (DC 15). On a failed save, you have the Charmed condition for 1d12 hours. While Charmed, you must try to follow the symbiote\u2019s commands and further its goals. Whenever you take damage, you can repeat this save, ending the effect on a success. You might make this saving throw whenever you act contrary to the symbiote\u2019s agenda (DM\u2019s discretion).",
+      "is_origin_feat": false,
+      "tags": [
+        "Dark Gift"
+      ],
+      "choice": {
+        "status": "resolved",
+        "picks": [
+          "Insight",
+          "Infernal"
+        ]
+      }
+    }
+  ],
+  "personality": {},
+  "currency": {
+    "cp": 0,
+    "sp": 0,
+    "gp": 57,
+    "ep": 0,
+    "pp": 0
+  },
+  "inventory": [
+    {
+      "name": "Shield",
+      "quantity": 1,
+      "equipped": true,
+      "attuned": false,
+      "weight": 6,
+      "cost_gp": 10,
+      "type": "Shield",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": 2
+    },
+    {
+      "name": "Chain Shirt",
+      "quantity": 1,
+      "equipped": true,
+      "attuned": false,
+      "weight": 20,
+      "cost_gp": 50,
+      "type": "",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": 13
+    },
+    {
+      "name": "Mace",
+      "quantity": 1,
+      "equipped": true,
+      "attuned": false,
+      "weight": 4,
+      "cost_gp": 5,
+      "type": "Mace",
+      "rarity": "Common",
+      "damage": "1d6",
+      "damage_type": "Bludgeoning",
+      "armor_class": null
+    },
+    {
+      "name": "Backpack",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 5,
+      "cost_gp": 2,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Amulet",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Rations",
+      "quantity": 7,
+      "equipped": false,
+      "attuned": false,
+      "weight": 2,
+      "cost_gp": 0.5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Robe",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 4,
+      "cost_gp": 1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Blanket",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 3,
+      "cost_gp": 0.5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Tinderbox",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 0.5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Lamp",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 0.5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Holy Water",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 25,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    }
+  ],
+  "spells": {
+    "race": [
+      {
+        "name": "Light",
+        "level": 0,
+        "school": "Evocation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      }
+    ],
+    "class": [
+      {
+        "name": "Light",
+        "level": 0,
+        "school": "Evocation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      }
+    ],
+    "Cleric": [
+      {
+        "name": "Guidance",
+        "level": 0,
+        "school": "Divination",
+        "concentration": true,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Sacred Flame",
+        "level": 0,
+        "school": "Evocation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Spare the Dying",
+        "level": 0,
+        "school": "Necromancy",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Bane",
+        "level": 1,
+        "school": "Enchantment",
+        "concentration": true,
+        "ritual": false,
+        "prepared": true
+      },
+      {
+        "name": "Cure Wounds",
+        "level": 1,
+        "school": "Abjuration",
+        "concentration": false,
+        "ritual": false,
+        "prepared": true
+      },
+      {
+        "name": "Guiding Bolt",
+        "level": 1,
+        "school": "Evocation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": true
+      },
+      {
+        "name": "Healing Word",
+        "level": 1,
+        "school": "Abjuration",
+        "concentration": false,
+        "ritual": false,
+        "prepared": true
+      }
+    ]
+  },
+  "notes": {},
+  "computed_stats": {
+    "passive_perception": 15,
+    "armor_class": {
+      "value": 15,
+      "basis": "Chain Shirt",
+      "verified": false,
+      "note": "Armor-type Dex-cap handling (light/medium/heavy) is unverified against a real armored-character export - this character has no armor equipped, so this code path has only been exercised against synthetic data. Recheck the 'type' string convention DDB uses for actual armor items before trusting this.",
+      "shield": true
+    },
+    "initiative": 0,
+    "spellcasting": [
+      {
+        "class": "Cleric",
+        "ability": "Wisdom",
+        "spell_save_dc": 13,
+        "spell_attack_bonus": 5
+      }
+    ]
+  }
+}

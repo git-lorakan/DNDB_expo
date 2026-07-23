@@ -1,0 +1,545 @@
+{
+  "name": "Dorian",
+  "gender": "Male",
+  "alignment": "Chaotic Neutral",
+  "faith": null,
+  "age": 25,
+  "appearance": {
+    "hair": "Chestnut, Long and braided in the back",
+    "eyes": "Green/Blue",
+    "skin": "Warm Beige",
+    "height": "6' 2\"",
+    "weight": 190
+  },
+  "level": 1,
+  "proficiency_bonus": 2,
+  "experience_points": 0,
+  "inspiration": false,
+  "race": {
+    "name": "Human",
+    "size": "Medium",
+    "speed": {
+      "walk": 30
+    },
+    "traits": [
+      {
+        "name": "Resourceful",
+        "summary": "You gain Heroic Inspiration whenever you finish a Long Rest."
+      },
+      {
+        "name": "Skillful",
+        "summary": "You gain proficiency in one skill of your choice.",
+        "choice": {
+          "status": "resolved",
+          "picks": [
+            "Persuasion"
+          ]
+        }
+      },
+      {
+        "name": "Versatile",
+        "summary": "You gain an Origin feat of your choice.",
+        "choice": {
+          "status": "unresolved_in_source",
+          "picks": []
+        }
+      },
+      {
+        "name": "Creature Type",
+        "summary": "You're a Humanoid."
+      },
+      {
+        "name": "Ability Score Increases",
+        "summary": "When determining your character\u2019s ability scores, increase one score by 2 and a different one by 1, or increase three scores by 1.",
+        "choice": {
+          "status": "unresolved_in_source",
+          "picks": []
+        }
+      }
+    ]
+  },
+  "background": {
+    "name": "Mist Wanderer",
+    "skill_proficiencies": "Survival and Stealth",
+    "tool_proficiencies": "<em>Choose one kind of Artisan\u2019s Tools</em>",
+    "languages": "",
+    "feature_name": "A Dark Gift feat of your choice"
+  },
+  "classes": [
+    {
+      "name": "Ranger",
+      "level": 1,
+      "subclass": null,
+      "hit_die": "d10",
+      "is_starting_class": true,
+      "features_gained": [
+        {
+          "name": "Core Ranger Traits",
+          "summary": "As a Level 1 Character:\n\r\n\r\nGain all the traits in the Core Ranger Traits table.\r\nGain the Ranger\u2019s level 1 features.\r\n\r\nCore Ranger Traits\r\n\r\n\r\nPrimary Ability\r\nDexterity and Wisdom\r\n\r\n\r\nHit Point Die\r\nD10 per Ranger level\r\n\r\n\r\nSaving Throw Proficiencies\r\nStrength and Dexterity\r\n\r\n\r\nSkill Proficiencies\r\nChoose 3: Animal Handling, Athletics, Insight, Investigation, Nature, Perception, Stealth, or Survival\r\n\r\n\r\nWeapon Proficiencies\r\nSimple and Martial weapons\r\n\r\n\r\nArmor Training\r\nLight and Medium armor and Shields\r\n\r\n\r\nStarting Equipment\r\nChoose A or B: (A) Studded Leather Armor, Scimitar, Shortsword, Longbow, 20 Arrows, Quiver, Druidic Focus (sprig of mistletoe), Explorer\u2019s Pack, and 7 GP; or (B) 150 GP",
+          "choice": {
+            "status": "resolved",
+            "picks": [
+              "Survival",
+              "Nature",
+              "Perception"
+            ]
+          }
+        },
+        {
+          "name": "Spellcasting",
+          "summary": "You have learned to channel the magical essence of nature to cast spells.\n\r\nSpell Slots. The Ranger Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended slots when you finish a Long Rest.\n\r\nPrepared Spells of Level 1+. You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose two level 1 Ranger spells.\n\r\nThe number of spells on your list increases as you gain Ranger levels, as shown in the Prepared Spells column of the Ranger Features table. Whenever that number increases, choose additional Ranger spells until the number of spells on your list matches the number in the Ranger Features table. The chosen spells must be of a level for which you have spell slots. For example, if you\u2019re a level 5 Ranger, your list of prepared spells can include six Ranger spells of level 1 or 2 in any combination.\n\r\nIf another Ranger feature gives you spells that you always have prepared, those spells don\u2019t count against the number of spells you can prepare with this feature, but those spells otherwise count as Ranger spells for you.\n\r\nChanging Your Prepared Spells. Whenever you finish a Long Rest, you can replace one spell on your list with another Ranger spell for which you have spell slots.\n\r\nSpellcasting Ability. Wisdom is your spellcasting ability for your Ranger spells.\n\r\nSpellcasting Focus. You can use a Druidic Focus as a Spellcasting Focus for your Ranger spells."
+        },
+        {
+          "name": "Favored Enemy",
+          "summary": "You always have Hunter\u2019s Mark prepared and can cast it without expending a spell slot {{scalevalue}} times per Long Rest."
+        },
+        {
+          "name": "Weapon Mastery",
+          "summary": "Your training with weapons allows you to use the mastery properties of two kinds of weapons of your choice with which you have proficiency, such as Longbows and Shortswords.\n\r\nWhenever you finish a Long Rest, you can change the kinds of weapons you chose. For example, you could switch to using the mastery properties of Scimitars and Longswords."
+        }
+      ],
+      "pending_choices": [
+        {
+          "name": "Ranger Subclass",
+          "required_level": 3,
+          "status": "not_yet_available",
+          "picks": []
+        }
+      ]
+    }
+  ],
+  "ability_scores": {
+    "Strength": {
+      "score": 10,
+      "modifier": 0
+    },
+    "Dexterity": {
+      "score": 17,
+      "modifier": 3
+    },
+    "Constitution": {
+      "score": 13,
+      "modifier": 1
+    },
+    "Intelligence": {
+      "score": 10,
+      "modifier": 0
+    },
+    "Wisdom": {
+      "score": 16,
+      "modifier": 3
+    },
+    "Charisma": {
+      "score": 8,
+      "modifier": -1
+    }
+  },
+  "hit_points": {
+    "max": 10,
+    "current": 10,
+    "temporary": 0
+  },
+  "speed": {
+    "walk": 30
+  },
+  "proficiencies": {
+    "saving_throws": [
+      "Dexterity",
+      "Strength"
+    ],
+    "skills": {
+      "Acrobatics": {
+        "ability": "Dexterity",
+        "proficient": true,
+        "expertise": false
+      },
+      "Nature": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      },
+      "Perception": {
+        "ability": "Wisdom",
+        "proficient": true,
+        "expertise": false
+      },
+      "Persuasion": {
+        "ability": "Charisma",
+        "proficient": true,
+        "expertise": false
+      },
+      "Stealth": {
+        "ability": "Dexterity",
+        "proficient": true,
+        "expertise": false
+      },
+      "Survival": {
+        "ability": "Wisdom",
+        "proficient": true,
+        "expertise": false
+      }
+    },
+    "tools": [
+      "Choose an Artisan's Tool"
+    ],
+    "weapons": [
+      "Martial Weapons",
+      "Simple Weapons"
+    ],
+    "armor": [
+      "Light Armor",
+      "Medium Armor",
+      "Shields"
+    ],
+    "languages": [
+      "Common",
+      "Dwarvish",
+      "Giant"
+    ],
+    "damage_resistances": []
+  },
+  "feats": [
+    {
+      "name": "Weapon Mastery",
+      "summary": "Your training with weapons allows you to use the mastery properties of two kinds of weapons of your choice with which you have proficiency.\n\r\nWhenever you finish a Long Rest, you can change the kinds of weapons you chose.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "resolved",
+        "picks": [
+          "Longbow (Slow)",
+          "Scimitar (Nick)"
+        ]
+      }
+    },
+    {
+      "name": "Dark Bargain",
+      "summary": "At your GM's discretion, you have taken a Dark Bargain.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Character Threads",
+      "summary": "Threads are aspects added to characters at any time during their career that have a specific short or long-term goal.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Runestones",
+      "summary": "At the beginning of the Northlands Sagas adventure path, each player should draw one Runestone randomly.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Mist Walker",
+      "summary": "Domain Traveler. When you enter the Mists to reach a specific domain, you are treated as if you possess a Mist talisman for that domain. You must know the name of the chosen domain, but you don\u2019t need to have previously visited. This trait doesn\u2019t allow you to bypass domain borders closed by a Darklord\u2019s will.\r\n\r\nMist Walk. When you take damage or fail a Grappled or Restrained saving throw, you can take a Reaction and teleport up to 15 ft. to an unoccupied space you can see. You can use this feature 2 times per Long Rest.\r\n\r\nPoisoned Roots. When you finish a Long Rest, the 10-mile radius around you becomes a vitality siphon. Whenever you finish a Short Rest in that area, make a Con. saving throw (DC 15). On a failed save, you get no benefits from finishing that rest.",
+      "is_origin_feat": false,
+      "tags": [
+        "Dark Gift"
+      ]
+    },
+    {
+      "name": "Mist Wanderer Ability Score Increase",
+      "summary": "The Mist Wanderer Background allows you to choose between Dexterity, Constitution, Wisdom. Increase one of these scores by 2 and another one by 1, or increase all three by 1. None of these increases can raise a score above 20.",
+      "is_origin_feat": false,
+      "tags": [
+        "__INITIAL_ASI",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "resolved",
+        "picks": [
+          "Increase two scores (+2 / +1)",
+          "Dexterity Score",
+          "Wisdom Score"
+        ]
+      }
+    },
+    {
+      "name": "Sharp Eye",
+      "summary": "You can give yourself Advantage on any ability check made as part of the Search or Study action. You can use this feature 2 times per Long Rest. If the check fails, the use of this feature isn\u2019t expended.",
+      "is_origin_feat": true,
+      "tags": [
+        "Origin"
+      ]
+    }
+  ],
+  "personality": {},
+  "currency": {
+    "cp": 0,
+    "sp": 0,
+    "gp": 57,
+    "ep": 0,
+    "pp": 0
+  },
+  "inventory": [
+    {
+      "name": "Studded Leather",
+      "quantity": 1,
+      "equipped": true,
+      "attuned": false,
+      "weight": 13,
+      "cost_gp": 45,
+      "type": "",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": 12
+    },
+    {
+      "name": "Scimitar",
+      "quantity": 1,
+      "equipped": true,
+      "attuned": false,
+      "weight": 3,
+      "cost_gp": 25,
+      "type": "Scimitar",
+      "rarity": "Common",
+      "damage": "1d6",
+      "damage_type": "Slashing",
+      "armor_class": null
+    },
+    {
+      "name": "Shortsword",
+      "quantity": 1,
+      "equipped": true,
+      "attuned": false,
+      "weight": 2,
+      "cost_gp": 10,
+      "type": "Shortsword",
+      "rarity": "Common",
+      "damage": "1d6",
+      "damage_type": "Piercing",
+      "armor_class": null
+    },
+    {
+      "name": "Longbow",
+      "quantity": 1,
+      "equipped": true,
+      "attuned": false,
+      "weight": 2,
+      "cost_gp": 50,
+      "type": "Longbow",
+      "rarity": "Common",
+      "damage": "1d8",
+      "damage_type": "Piercing",
+      "armor_class": null
+    },
+    {
+      "name": "Backpack",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 5,
+      "cost_gp": 2,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Quiver",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Arrows",
+      "quantity": 20,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Sprig of Mistletoe",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 0,
+      "cost_gp": 1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Oil",
+      "quantity": 2,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 0.1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Rations",
+      "quantity": 10,
+      "equipped": false,
+      "attuned": false,
+      "weight": 2,
+      "cost_gp": 0.5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Rope",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 5,
+      "cost_gp": 1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Bedroll",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 7,
+      "cost_gp": 1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Tinderbox",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 0.5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Torch",
+      "quantity": 10,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 0.01,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Waterskin",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 5,
+      "cost_gp": 0.2,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    }
+  ],
+  "spells": {
+    "class": [
+      {
+        "name": "Hunter's Mark",
+        "level": 1,
+        "school": "Divination",
+        "concentration": true,
+        "ritual": false,
+        "prepared": false
+      }
+    ],
+    "Ranger": [
+      {
+        "name": "Ensnaring Strike",
+        "level": 1,
+        "school": "Conjuration",
+        "concentration": true,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Hunter's Mark",
+        "level": 1,
+        "school": "Divination",
+        "concentration": true,
+        "ritual": false,
+        "prepared": false
+      }
+    ]
+  },
+  "notes": {},
+  "computed_stats": {
+    "passive_perception": 15,
+    "armor_class": {
+      "value": 15,
+      "basis": "Studded Leather",
+      "verified": false,
+      "note": "Armor-type Dex-cap handling (light/medium/heavy) is unverified against a real armored-character export - this character has no armor equipped, so this code path has only been exercised against synthetic data. Recheck the 'type' string convention DDB uses for actual armor items before trusting this."
+    },
+    "initiative": 3,
+    "spellcasting": [
+      {
+        "class": "Ranger",
+        "ability": "Wisdom",
+        "spell_save_dc": 13,
+        "spell_attack_bonus": 5
+      }
+    ]
+  }
+}
