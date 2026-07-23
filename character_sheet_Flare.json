@@ -40,7 +40,7 @@
       },
       {
         "name": "Celestial Revelation",
-        "summary": "Once per Long Rest, you transform using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required).\r\n\r\nOnce on each of your turns before the transformation ends, you can deal 2 extra damage (Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance) to one target when you deal damage to it with an attack or a spell.\r\n\r\nHeavenly Wings. You have a Fly Speed equal to your Speed.\r\n\r\nInner Radiance. You shed Bright Light in a 10-ft. radius and Dim Light for an additional 10 ft., and at the end of each of your turns, each creature within 10 ft. of you takes 2 Radiant damage.\r\n\r\nNecrotic Shroud. Creatures other than your allies within 10 ft. of you must succeed on a Cha. saving throw (DC {{savedc:cha}}) or have the Frightened condition until the end of your next turn."
+        "summary": "Once per Long Rest, you transform using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required).\r\n\r\nOnce on each of your turns before the transformation ends, you can deal 2 extra damage (Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance) to one target when you deal damage to it with an attack or a spell.\r\n\r\nHeavenly Wings. You have a Fly Speed equal to your Speed.\r\n\r\nInner Radiance. You shed Bright Light in a 10-ft. radius and Dim Light for an additional 10 ft., and at the end of each of your turns, each creature within 10 ft. of you takes 2 Radiant damage.\r\n\r\nNecrotic Shroud. Creatures other than your allies within 10 ft. of you must succeed on a Cha. saving throw (DC 10) or have the Frightened condition until the end of your next turn."
       },
       {
         "name": "Creature Type",
@@ -346,7 +346,19 @@
       "rarity": "Common",
       "damage": "1d6",
       "damage_type": "Bludgeoning",
-      "armor_class": null
+      "armor_class": null,
+      "attack": {
+        "ability_used": "Strength",
+        "proficient": true,
+        "to_hit": 2,
+        "damage": "1d6+0 Bludgeoning",
+        "versatile_damage": null,
+        "properties": [
+          "Sap"
+        ],
+        "range": 5,
+        "long_range": 5
+      }
     },
     {
       "name": "Backpack",
@@ -533,6 +545,68 @@
       }
     ]
   },
+  "actions": [
+    {
+      "name": "Healing Hands",
+      "source_category": "race",
+      "summary": "Once per Long Rest as a Magic action, you touch a creature and they regain 2d4 HP.",
+      "dice_roll": {
+        "dice": "2d4",
+        "damage_type_id": null,
+        "note": "No attack roll of its own - see the summary text for what this roll is for."
+      }
+    },
+    {
+      "name": "Initiate a Circle Spell",
+      "source_category": "class",
+      "summary": "You take a Magic action to initiate casting a Circle spell. When you do so, choose which Circle casting option you\u2019re using for this casting; you must also meet any of the other requirements described in that option\u2019s text. Until the Circle spell\u2019s casting is complete, you must maintain Concentration on the spell."
+    },
+    {
+      "name": "Circle Spell: Augment",
+      "source_category": "class",
+      "summary": "When you cast a spell with a range of at least 5 ft., you can increase the range of the spell by 1,000 ft. per secondary caster contributing to the spell, up to a max of a 1-mile increase."
+    },
+    {
+      "name": "Circle Spell: Distribute",
+      "source_category": "class",
+      "summary": "When you cast a spell that requires Concentration, you can distribute the mental load of the spell among you and the secondary casters. Once the casting is complete, you and all secondary casters can maintain Concentration on this spell. As long as at least one caster who contributed to the spell maintains this Concentration, the spell\u2019s effects remain active."
+    },
+    {
+      "name": "Circle Spell: Expand",
+      "source_category": "class",
+      "summary": "When you cast a spell that creates an area of effect, you can increase one dimension of the spell\u2019s area of effect for this casting by 10 ft. per secondary caster contributing to the spell. \r\n\r\nEach secondary caster contributing to the spell must expend a spell slot (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Circle Spell: Prolong",
+      "source_category": "class",
+      "summary": "When you cast a spell that has a duration of 1 min or longer, you can increase the duration of the spell depending on the number of secondary casters contributing to the spell.\r\n\r\nEach secondary caster contributing to the spell must expend a spell slot (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Circle Spell: Safeguard",
+      "source_category": "class",
+      "summary": "When you cast a spell that creates an area of effect, you can carve out a safe zone within that area of effect that is unaffected by the spell for its duration. This safe zone consists of a number of 5-ft. Cubes equal to 0 + the number of secondary casters contributing to the spell (min of 1 Cube). You can arrange the Cubes as you like, but each Cube must be contiguous with at least one other Cube.\r\n\r\nIf the spell\u2019s area of effect can be moved, the safe zone moves with it."
+    },
+    {
+      "name": "Circle Spell: Supplant",
+      "source_category": "class",
+      "summary": "When you cast a spell that requires at least one Material component with a specified cost that is consumed by the spell, you can reduce the min cost of one such Material component by 50 GP per each secondary caster contributing to the spell.\r\n\r\nEach secondary caster contributing to the spell must expend a spell slot of a level greater than or equal to the spell\u2019s level (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Symbiotic Being: Sustained Symbiosis",
+      "source_category": "feat",
+      "summary": "When you fail a saving throw, you can take a Reaction and expend one of your Hit Dice. Roll the die and add the number rolled to the saving throw. You can use this feature 2 times per Long Rest."
+    },
+    {
+      "name": "Symbiotic Being: Symbiotic Agenda",
+      "source_category": "feat",
+      "summary": "Immediately after you make a D20 Test and roll a 1 on the d20, make a Cha. saving throw (DC 15). On a failed save, you have the Charmed condition for 1d12 hours. While Charmed, you must try to follow the symbiote\u2019s commands and further its goals. Whenever you take damage, you can repeat this save, ending the effect on a success. You might make this saving throw whenever you act contrary to the symbiote\u2019s agenda (DM\u2019s discretion).",
+      "dice_roll": {
+        "dice": "1d12",
+        "damage_type_id": null,
+        "note": "No attack roll of its own - see the summary text for what this roll is for."
+      }
+    }
+  ],
   "notes": {},
   "computed_stats": {
     "passive_perception": 15,

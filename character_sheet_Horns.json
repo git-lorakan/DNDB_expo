@@ -310,7 +310,22 @@
       "rarity": "Common",
       "damage": "1d4",
       "damage_type": "Piercing",
-      "armor_class": null
+      "armor_class": null,
+      "attack": {
+        "ability_used": "Dexterity",
+        "proficient": true,
+        "to_hit": 3,
+        "damage": "1d4+1 Piercing",
+        "versatile_damage": null,
+        "properties": [
+          "Finesse",
+          "Light",
+          "Thrown",
+          "Nick"
+        ],
+        "range": 20,
+        "long_range": 60
+      }
     },
     {
       "name": "Dagger",
@@ -323,7 +338,22 @@
       "rarity": "Common",
       "damage": "1d4",
       "damage_type": "Piercing",
-      "armor_class": null
+      "armor_class": null,
+      "attack": {
+        "ability_used": "Dexterity",
+        "proficient": true,
+        "to_hit": 3,
+        "damage": "1d4+1 Piercing",
+        "versatile_damage": null,
+        "properties": [
+          "Finesse",
+          "Light",
+          "Thrown",
+          "Nick"
+        ],
+        "range": 20,
+        "long_range": 60
+      }
     },
     {
       "name": "Quarterstaff",
@@ -336,7 +366,20 @@
       "rarity": "Common",
       "damage": "1d6",
       "damage_type": "Bludgeoning",
-      "armor_class": null
+      "armor_class": null,
+      "attack": {
+        "ability_used": "Strength",
+        "proficient": true,
+        "to_hit": 1,
+        "damage": "1d6-1 Bludgeoning",
+        "versatile_damage": "1d8",
+        "properties": [
+          "Versatile",
+          "Topple"
+        ],
+        "range": 5,
+        "long_range": 5
+      }
     },
     {
       "name": "Spellbook",
@@ -597,6 +640,58 @@
       }
     ]
   },
+  "actions": [
+    {
+      "name": "Arcane Recovery",
+      "source_category": "class",
+      "summary": "When you finish a Short Rest, you can recover expended spell slots. The spell slots can have a combined level equal to no more than 1, and none of the slots can be level 6 or higher.\r\n\r\nYou can use this feature once per Long Rest."
+    },
+    {
+      "name": "Initiate a Circle Spell",
+      "source_category": "class",
+      "summary": "You take a Magic action to initiate casting a Circle spell. When you do so, choose which Circle casting option you\u2019re using for this casting; you must also meet any of the other requirements described in that option\u2019s text. Until the Circle spell\u2019s casting is complete, you must maintain Concentration on the spell."
+    },
+    {
+      "name": "Circle Spell: Augment",
+      "source_category": "class",
+      "summary": "When you cast a spell with a range of at least 5 ft., you can increase the range of the spell by 1,000 ft. per secondary caster contributing to the spell, up to a max of a 1-mile increase."
+    },
+    {
+      "name": "Circle Spell: Distribute",
+      "source_category": "class",
+      "summary": "When you cast a spell that requires Concentration, you can distribute the mental load of the spell among you and the secondary casters. Once the casting is complete, you and all secondary casters can maintain Concentration on this spell. As long as at least one caster who contributed to the spell maintains this Concentration, the spell\u2019s effects remain active."
+    },
+    {
+      "name": "Circle Spell: Expand",
+      "source_category": "class",
+      "summary": "When you cast a spell that creates an area of effect, you can increase one dimension of the spell\u2019s area of effect for this casting by 10 ft. per secondary caster contributing to the spell. \r\n\r\nEach secondary caster contributing to the spell must expend a spell slot (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Circle Spell: Prolong",
+      "source_category": "class",
+      "summary": "When you cast a spell that has a duration of 1 min or longer, you can increase the duration of the spell depending on the number of secondary casters contributing to the spell.\r\n\r\nEach secondary caster contributing to the spell must expend a spell slot (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Circle Spell: Safeguard",
+      "source_category": "class",
+      "summary": "When you cast a spell that creates an area of effect, you can carve out a safe zone within that area of effect that is unaffected by the spell for its duration. This safe zone consists of a number of 5-ft. Cubes equal to 0 + the number of secondary casters contributing to the spell (min of 1 Cube). You can arrange the Cubes as you like, but each Cube must be contiguous with at least one other Cube.\r\n\r\nIf the spell\u2019s area of effect can be moved, the safe zone moves with it."
+    },
+    {
+      "name": "Circle Spell: Supplant",
+      "source_category": "class",
+      "summary": "When you cast a spell that requires at least one Material component with a specified cost that is consumed by the spell, you can reduce the min cost of one such Material component by 50 GP per each secondary caster contributing to the spell.\r\n\r\nEach secondary caster contributing to the spell must expend a spell slot of a level greater than or equal to the spell\u2019s level (no action required). If the spell fails, these spell slots aren\u2019t expended."
+    },
+    {
+      "name": "Living Shadow: Lengthened Strike",
+      "source_category": "feat",
+      "summary": "When you make a melee attack roll as part of the Attack or Magic action on your turn, you can increase your reach for that attack by 10 ft. You can use this feature 2 times per Long Rest."
+    },
+    {
+      "name": "Living Shadow: Ominous Will",
+      "source_category": "feat",
+      "summary": "Immediately after you make a D20 Test and roll a 1 on the d20, make a Wis. saving throw (DC 15). On a failed save, you have the Incapacitated condition until the start of your next turn, and must roll on the Shadow\u2019s Will table to determine what you do during that turn."
+    }
+  ],
   "notes": {},
   "computed_stats": {
     "passive_perception": 10,

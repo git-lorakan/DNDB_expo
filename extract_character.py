@@ -32,15 +32,9 @@ ALIGNMENTS = {
 }
 
 WEAPON_CATEGORY_SLUGS = {1: "simple-weapons", 2: "martial-weapons"}
-
-# Best-effort id->name table for data.actions[].damageTypeId, a common DDB convention.
-# Every action in the export this was written against has damageTypeId: null, so this
-# mapping is unverified against real data - treat any output that used it as a guess.
-DAMAGE_TYPE_IDS = {
-    1: "Bludgeoning", 2: "Piercing", 3: "Slashing", 4: "Necrotic", 5: "Acid",
-    6: "Cold", 7: "Fire", 8: "Force", 9: "Lightning", 10: "Poison",
-    11: "Psychic", 12: "Radiant", 13: "Thunder",
-}
+# Confirmed against real martial weapons (Longsword/Scimitar/Shortsword/Longbow, all
+# categoryId 2, all matched against a "martial-weapons" proficiency modifier) as well as
+# simple weapons (Dagger/Quarterstaff, categoryId 1) - this mapping is no longer a guess.
 
 SKILL_ABILITY = {
     "acrobatics": "Dexterity", "animal-handling": "Wisdom", "arcana": "Intelligence",
@@ -95,9 +89,14 @@ def safe_eval_arithmetic(expr):
         return None
 
 
-def render_templates(text, proficiency, classlevel=None, ability_scores=None):
+def render_templates(text, proficiency, classlevel=None, limiteduse=None, scalevalue=None, ability_scores=None):
     """Render DDB's inline template placeholders, e.g. {{proficiency#unsigned}},
-    {{13+proficiency#unsigned}}, {{modifier:cha#unsigned}}, {{(classlevel/2)@roundup}}.
+    {{13+proficiency#unsigned}}, {{modifier:cha#unsigned}}, {{(classlevel/2)@roundup}},
+    {{limiteduse}} (a feature's own limitedUse.maxUses, e.g. "twice per Long Rest"),
+    {{savedc:cha}} (a full 8+proficiency+ability-mod save DC, not just the raw modifier),
+    {{scalevalue}} (a level-gated lookup in the feature's own levelScales table - can
+    resolve to a non-numeric value like a dice string, so it's only handled standalone,
+    never combined with arithmetic, since we have no real example of that combination).
     If a placeholder references a variable that isn't available in the current context
     (e.g. classlevel while rendering race/feat text with no specific class), the
     placeholder is left untouched rather than guessed at."""
@@ -112,6 +111,10 @@ def render_templates(text, proficiency, classlevel=None, ability_scores=None):
         if "#" in raw:
             raw, _fmt = raw.split("#", 1)  # only "unsigned" (bare number) observed; nothing else to special-case
         content = raw.strip()
+
+        if content == "scalevalue":
+            return m.group(0) if scalevalue is None else str(scalevalue)
+
         failed = False
 
         def sub_modifier(mm):
@@ -125,11 +128,28 @@ def render_templates(text, proficiency, classlevel=None, ability_scores=None):
 
         content = re.sub(r"modifier:([a-zA-Z]+)", sub_modifier, content)
 
+        def sub_savedc(mm):
+            nonlocal failed
+            name = ABILITY_ABBR.get(mm.group(1).lower())
+            mod = (ability_scores or {}).get(name, {}).get("modifier") if name else None
+            if mod is None:
+                failed = True
+                return mm.group(0)
+            return str(8 + proficiency + mod)
+
+        content = re.sub(r"savedc:([a-zA-Z]+)", sub_savedc, content)
+
         if re.search(r"\bclasslevel\b", content):
             if classlevel is None:
                 failed = True
             else:
                 content = re.sub(r"\bclasslevel\b", str(classlevel), content)
+
+        if re.search(r"\blimiteduse\b", content):
+            if limiteduse is None:
+                failed = True
+            else:
+                content = re.sub(r"\blimiteduse\b", str(limiteduse), content)
 
         content = re.sub(r"\bproficiency\b", str(proficiency), content)
 
@@ -292,6 +312,21 @@ def proficiency_bonus(level):
     return 2 + max(0, (level - 1) // 4)
 
 
+def resolve_level_scale(fdef, level):
+    """{{scalevalue}} resolves to the highest-level entry in a class feature's own
+    levelScales table that's <= the character's current level in that class - e.g. a
+    Ranger's Favored Enemy/Hunter's Mark feature scales its "times per Long Rest" from
+    2 (level 1) up to 6 (level 17) via this table, confirmed against a real export."""
+    scales = fdef.get("levelScales") or []
+    applicable = [s for s in scales if s.get("level") is not None and s["level"] <= level]
+    if not applicable:
+        return None
+    best = max(applicable, key=lambda s: s["level"])
+    if best.get("fixedValue") is not None:
+        return best["fixedValue"]
+    return (best.get("dice") or {}).get("diceString")
+
+
 def gather_classes(data, choice_index, proficiency, ability_scores):
     classes = []
     for c in data.get("classes", []):
@@ -321,8 +356,10 @@ def gather_classes(data, choice_index, proficiency, ability_scores):
                     })
                 continue
 
+            scalevalue = resolve_level_scale(fdef, level)
             summary = render_templates(strip_html(fdef.get("snippet") or fdef.get("description")),
-                                        proficiency, classlevel=level, ability_scores=ability_scores)
+                                        proficiency, classlevel=level, scalevalue=scalevalue,
+                                        ability_scores=ability_scores)
             entry = {"name": name, "summary": summary}
             if status is not None:
                 entry["choice"] = {"status": status, "picks": picks}
@@ -627,14 +664,24 @@ def build_class_level_by_entity_type(data):
 
 def gather_actions(data, ability_scores, proficiency):
     """Surface data.actions (race/class/background/item/feat) and data.customActions -
-    these carry precomputed attack/save mechanics (unarmed strikes, class features with
-    an attack roll or save DC, etc.) that gather_inventory's weapon-only pass can't see.
+    these carry precomputed attack/save/damage mechanics (unarmed strikes, class
+    features with an attack roll, a save DC, or rider damage, etc.) that
+    gather_inventory's weapon-only pass can't see.
 
-    Every action in the export this was written against has attackTypeRange/dice/
-    saveStatId/fixedSaveDc all null (they're all utility/reference features, not actual
-    attacks), so the attack/save-block construction below is logically straightforward
-    but untested against a populated real example - flagged accordingly whenever it
-    actually fires."""
+    Tested against four real exports. attackTypeRange and saveStatId/fixedSaveDc were
+    null in all of them - no action in any of the four is an attack with its own to-hit
+    roll, or has a populated save DC (even ones whose *text* clearly describes a saving
+    throw, like Ominous Will/Symbiotic Agenda) - so those branches remain unverified
+    against real data and are flagged accordingly.
+
+    "dice" *is* populated on real entries, but it is not reliably damage: across the
+    four exports it shows up on a Ranger's Hunter's Mark (rider damage), a Tiefling's
+    Knowledge from a Past Life (a d6 added to a failed ability check), a cleric feature's
+    Healing Hands (2d4 healing), and a duration in hours on a saving-throw effect. So a
+    populated "dice" only means "this feature has an associated dice roll" - what it's
+    *for* is contextual and comes from the rendered summary text, not from a label this
+    script invents. It gets a neutral "dice_roll" block, never an "attack" block with a
+    fabricated to-hit."""
     class_level_by_entity_type = build_class_level_by_entity_type(data)
 
     actions = []
@@ -648,13 +695,16 @@ def gather_actions(data, ability_scores, proficiency):
                 continue
             classlevel = (class_level_by_entity_type.get(a.get("componentTypeId"))
                           if source_category == "class" else None)
+            limiteduse = (a.get("limitedUse") or {}).get("maxUses")
             summary = render_templates(strip_html(a.get("snippet") or a.get("description")),
-                                        proficiency, classlevel=classlevel, ability_scores=ability_scores)
+                                        proficiency, classlevel=classlevel, limiteduse=limiteduse,
+                                        ability_scores=ability_scores)
             entry = {"name": name, "source_category": source_category, "summary": summary}
 
-            is_attack = a.get("attackTypeRange") is not None or a.get("dice") is not None
+            has_attack_roll = a.get("attackTypeRange") is not None or a.get("fixedToHit") is not None
+            has_dice = a.get("dice") is not None or a.get("value") is not None
             is_save = a.get("saveStatId") is not None or a.get("fixedSaveDc") is not None
-            if not (is_attack or is_save):
+            if not (has_attack_roll or has_dice or is_save):
                 actions.append(entry)
                 continue
 
@@ -662,29 +712,44 @@ def gather_actions(data, ability_scores, proficiency):
             ability_name = ABILITY_NAMES.get(ability_id) if ability_id else None
             ability_mod = ability_scores.get(ability_name, {}).get("modifier", 0) if ability_name else 0
 
-            if is_attack:
+            dice_str = None
+            if has_dice:
+                dice = a.get("dice") or {}
+                fixed_value = a.get("value")
+                dice_str = dice.get("diceString") or (str(fixed_value) if fixed_value is not None else None)
+
+            if has_attack_roll:
                 to_hit = a.get("fixedToHit")
                 if to_hit is None:
                     to_hit = ability_mod + (proficiency if a.get("isProficient") else 0)
-                dice = a.get("dice") or {}
-                damage_type = DAMAGE_TYPE_IDS.get(a.get("damageTypeId"))
                 damage = None
-                if dice.get("diceString"):
+                if dice_str:
                     sign = "+" if ability_mod >= 0 else "-"
-                    damage = f"{dice['diceString']}{sign}{abs(ability_mod)}"
-                    if damage_type:
-                        damage += f" {damage_type}"
+                    damage = f"{dice_str}{sign}{abs(ability_mod)}"
+                    if a.get("damageTypeId") is not None:
+                        damage += (f" (raw damageTypeId={a['damageTypeId']}, not decoded - a real Hunter's "
+                                   "Mark example suggests the common 13-element table doesn't reliably apply here)")
                 entry["attack"] = {
                     "attack_type": {1: "Melee", 2: "Ranged"}.get(a.get("attackTypeRange"), a.get("attackTypeRange")),
                     "ability_used": ability_name,
                     "to_hit": to_hit,
                     "damage": damage,
                     "verified": False,
-                    "note": ("This action's attack fields (attackTypeRange/dice/damageTypeId) had no "
-                             "populated real example in the export this script was written against - "
-                             "the field mappings used here (e.g. damageTypeId -> damage type name) are "
-                             "best-effort and unverified. Recheck against source rules before trusting this."),
+                    "note": ("No action with a populated attackTypeRange/fixedToHit was found in any of the "
+                             "four exports this script was tested against, so this branch is logically "
+                             "straightforward but unverified against real data. Recheck before trusting this."),
                 }
+            elif has_dice and dice_str:
+                # A dice roll with no attack roll of its own - could be rider damage
+                # (Hunter's Mark), healing (Healing Hands), a check bonus (Knowledge from
+                # a Past Life), a condition duration, etc. What it's for is in the summary
+                # text above; this script doesn't guess a label for it.
+                entry["dice_roll"] = {
+                    "dice": dice_str,
+                    "damage_type_id": a.get("damageTypeId"),
+                    "note": "No attack roll of its own - see the summary text for what this roll is for.",
+                }
+
             if is_save:
                 save_dc = a.get("fixedSaveDc")
                 if save_dc is None:
@@ -693,8 +758,8 @@ def gather_actions(data, ability_scores, proficiency):
                     "ability": ability_name,
                     "dc": save_dc,
                     "verified": False,
-                    "note": ("This action's save fields (saveStatId/fixedSaveDc) had no populated real "
-                              "example in the export this script was written against - recheck before trusting this."),
+                    "note": ("No action with a populated saveStatId/fixedSaveDc was found in any of the four "
+                              "exports this script was tested against - recheck before trusting this."),
                 }
             actions.append(entry)
     return actions
