@@ -152,6 +152,9 @@
     "current": 8,
     "temporary": 0
   },
+  "hit_dice": {
+    "d8": 1
+  },
   "speed": {
     "walk": 30
   },

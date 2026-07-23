@@ -466,6 +466,22 @@ def gather_hit_points(data):
     }
 
 
+def gather_hit_dice(data):
+    """Total hit-dice pool for resting, grouped by die size (e.g. {"d10": 3} for a
+    level-3 Paladin) - one die of the class's hitDice size per class level, summed
+    across classes that share the same die size for multiclass characters. This is the
+    static pool size, distinct from current HP or from how many dice have been spent."""
+    pool = {}
+    for c in data.get("classes", []):
+        die_size = (c.get("definition") or {}).get("hitDice")
+        level = c.get("level") or 0
+        if not die_size:
+            continue
+        key = f"d{die_size}"
+        pool[key] = pool.get(key, 0) + level
+    return pool
+
+
 def gather_speed(data):
     race = data.get("race") or {}
     speeds = ((race.get("weightSpeeds") or {}).get("normal")) or {}
@@ -1031,6 +1047,7 @@ def extract(raw):
         "classes": gather_classes(data, choice_index, resource_index, proficiency, ability_scores),
         "ability_scores": ability_scores,
         "hit_points": gather_hit_points(data),
+        "hit_dice": gather_hit_dice(data),
         "speed": gather_speed(data),
         "proficiencies": proficiencies,
         "feats": gather_feats(data, choice_index, resource_index, proficiency, ability_scores),
@@ -1059,6 +1076,8 @@ def to_text_summary(c):
     hp = c["hit_points"]
     stats = c["computed_stats"]
     lines.append(f"HP: {hp['current']}/{hp['max']} (temp {hp['temporary']})")
+    hit_dice_str = ", ".join(f"{count}{die}" for die, count in c["hit_dice"].items())
+    lines.append(f"Hit Dice: {hit_dice_str}")
     lines.append(f"Proficiency Bonus: +{c['proficiency_bonus']}")
     lines.append(f"Speed: {c['speed']}")
     ac = stats["armor_class"]
