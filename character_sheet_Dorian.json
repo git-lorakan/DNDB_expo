@@ -91,7 +91,16 @@
         },
         {
           "name": "Favored Enemy",
-          "summary": "You always have Hunter\u2019s Mark prepared and can cast it without expending a spell slot 2 times per Long Rest."
+          "summary": "You always have Hunter\u2019s Mark prepared and can cast it without expending a spell slot 2 times per Long Rest.",
+          "resources": [
+            {
+              "action_name": "Hunter\u2019s Mark",
+              "max_uses": 2,
+              "uses_remaining": 2,
+              "number_used": 0,
+              "reset_type": "Long Rest"
+            }
+          ]
         },
         {
           "name": "Weapon Mastery",
@@ -360,6 +369,15 @@
       "is_origin_feat": false,
       "tags": [
         "Dark Gift"
+      ],
+      "resources": [
+        {
+          "action_name": "Mist Walker: Mist Walk",
+          "max_uses": 2,
+          "uses_remaining": 2,
+          "number_used": 0,
+          "reset_type": "Long Rest"
+        }
       ]
     },
     {
@@ -385,6 +403,15 @@
       "is_origin_feat": true,
       "tags": [
         "Origin"
+      ],
+      "resources": [
+        {
+          "action_name": "Sharp Eye",
+          "max_uses": 2,
+          "uses_remaining": 2,
+          "number_used": 0,
+          "reset_type": "Long Rest"
+        }
       ]
     }
   ],

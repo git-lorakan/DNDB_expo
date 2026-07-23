@@ -336,7 +336,7 @@ def resolve_level_scale(fdef, level):
     return (best.get("dice") or {}).get("diceString")
 
 
-def gather_classes(data, choice_index, proficiency, ability_scores):
+def gather_classes(data, choice_index, resource_index, proficiency, ability_scores):
     classes = []
     for c in data.get("classes", []):
         definition = c.get("definition") or {}
@@ -372,6 +372,9 @@ def gather_classes(data, choice_index, proficiency, ability_scores):
             entry = {"name": name, "summary": summary}
             if status is not None:
                 entry["choice"] = {"status": status, "picks": picks}
+            resources = resource_index.get(fdef.get("id"))
+            if resources:
+                entry["resources"] = resources
             features_gained.append(entry)
 
         classes.append({
@@ -479,7 +482,7 @@ def gather_size(data):
     return None
 
 
-def gather_race(data, choice_index, proficiency, ability_scores):
+def gather_race(data, choice_index, resource_index, proficiency, ability_scores):
     race = data.get("race") or {}
     traits = []
     for t in race.get("racialTraits", []):
@@ -493,6 +496,9 @@ def gather_race(data, choice_index, proficiency, ability_scores):
         status, picks = resolve_choice(choice_index, d.get("id"))
         if status is not None:
             trait["choice"] = {"status": status, "picks": picks}
+        resources = resource_index.get(d.get("id"))
+        if resources:
+            trait["resources"] = resources
         traits.append(trait)
     return {
         "name": race.get("fullName") or race.get("baseRaceName"),
@@ -513,7 +519,7 @@ def gather_background(data):
     }
 
 
-def gather_feats(data, choice_index, proficiency, ability_scores):
+def gather_feats(data, choice_index, resource_index, proficiency, ability_scores):
     feats = []
     for f in data.get("feats", []):
         d = f.get("definition", f)
@@ -529,6 +535,9 @@ def gather_feats(data, choice_index, proficiency, ability_scores):
         status, picks = resolve_choice(choice_index, d.get("id"))
         if status is not None:
             feat["choice"] = {"status": status, "picks": picks}
+        resources = resource_index.get(d.get("id"))
+        if resources:
+            feat["resources"] = resources
         feats.append(feat)
     return feats
 
@@ -743,6 +752,55 @@ def gather_notes(data):
     return {k: v for k, v in notes.items() if v}
 
 
+RESET_TYPES = {1: "Short Rest", 2: "Long Rest"}
+# Only resetType 2 (Long Rest) has a confirmed real example - every limited-use action
+# across all four exports this script was tested against (Arcane Recovery, Knowledge
+# from a Past Life, Lay on Hands, Hunter's Mark, Sharp Eye, etc.) is resetType 2, and
+# every one of them textually says "per Long Rest". resetType 1 (Short Rest) is the
+# standard DDB convention but has no confirmed example here.
+
+
+def build_resource_index(data, proficiency):
+    """Index live limited-use resource tracking (maxUses/numberUsed/resetType) from
+    data.actions/data.customActions by componentId, so gather_race/gather_feats/
+    gather_classes can attach it to the matching feature/trait/feat entry (matched the
+    same way choices/options are matched elsewhere in this script: componentId ==
+    the feature/trait/feat's own definition id).
+
+    Deliberately does NOT use the feature/trait/feat definition's own "limitedUse"
+    field when it has one - that's a different, unreliable format (a list like
+    [{"level": None, "uses": 1}, ...] with no numberUsed/resetType at all), confirmed
+    wrong on a real example: Lay on Hands' definition-level list has 3 entries, but its
+    real resource pool (from the matching action) is 5 uses. Only data.actions'
+    limitedUse dict is live per-character tracking data.
+
+    A "maxUses: 0" alongside "useProficiencyBonus: true" doesn't mean zero uses - it
+    means the real cap is the character's proficiency bonus. This shows up six times
+    across the four exports (Living Shadow, Knowledge from a Past Life, Gathered
+    Whispers, Sustained Symbiosis, Sharp Eye, Mist Walk), always matching a
+    "X times per Long Rest" in the feature's own text where X is the proficiency bonus -
+    so it's resolved here rather than surfaced as a literal 0."""
+    index = {}
+    action_lists = list((data.get("actions") or {}).items())
+    action_lists.append(("custom", data.get("customActions") or []))
+    for _source_category, entries in action_lists:
+        for a in entries or []:
+            lu = a.get("limitedUse")
+            if not lu:
+                continue
+            component_id = a.get("componentId")
+            max_uses = proficiency if lu.get("useProficiencyBonus") else lu.get("maxUses")
+            number_used = lu.get("numberUsed") or 0
+            index.setdefault(component_id, []).append({
+                "action_name": a.get("name"),
+                "max_uses": max_uses,
+                "uses_remaining": (max_uses - number_used) if max_uses is not None else None,
+                "number_used": number_used,
+                "reset_type": RESET_TYPES.get(lu.get("resetType"), lu.get("resetType")),
+            })
+    return index
+
+
 def build_class_level_by_entity_type(data):
     """Map a class feature's shared entityTypeId (e.g. 12168134 for every Wizard
     class-feature/action) to that class's current level, so gather_actions can resolve
@@ -948,6 +1006,7 @@ def extract(raw):
     ability_scores = gather_ability_scores(data)
     proficiencies = gather_proficiencies(data, ability_scores, proficiency)
     choice_index = build_choice_index(data)
+    resource_index = build_resource_index(data, proficiency)
     weapon_proficiency_slugs = gather_proficiency_subtype_slugs(data)
 
     character = {
@@ -967,14 +1026,14 @@ def extract(raw):
         "proficiency_bonus": proficiency,
         "experience_points": data.get("currentXp"),
         "inspiration": data.get("inspiration", False),
-        "race": gather_race(data, choice_index, proficiency, ability_scores),
+        "race": gather_race(data, choice_index, resource_index, proficiency, ability_scores),
         "background": gather_background(data),
-        "classes": gather_classes(data, choice_index, proficiency, ability_scores),
+        "classes": gather_classes(data, choice_index, resource_index, proficiency, ability_scores),
         "ability_scores": ability_scores,
         "hit_points": gather_hit_points(data),
         "speed": gather_speed(data),
         "proficiencies": proficiencies,
-        "feats": gather_feats(data, choice_index, proficiency, ability_scores),
+        "feats": gather_feats(data, choice_index, resource_index, proficiency, ability_scores),
         "personality": gather_traits(data),
         "currency": data.get("currencies"),
         "inventory": gather_inventory(data, ability_scores, proficiency, weapon_proficiency_slugs),

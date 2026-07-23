@@ -100,7 +100,16 @@
         },
         {
           "name": "Arcane Recovery",
-          "summary": "When you finish a Short Rest, you can recover expended spell slots. The spell slots can have a combined level equal to no more than 1, and none of the slots can be level 6 or higher.\r\n\r\nYou can use this feature once per Long Rest."
+          "summary": "When you finish a Short Rest, you can recover expended spell slots. The spell slots can have a combined level equal to no more than 1, and none of the slots can be level 6 or higher.\r\n\r\nYou can use this feature once per Long Rest.",
+          "resources": [
+            {
+              "action_name": "Arcane Recovery",
+              "max_uses": 1,
+              "uses_remaining": 1,
+              "number_used": 0,
+              "reset_type": "Long Rest"
+            }
+          ]
         }
       ],
       "pending_choices": [
@@ -395,7 +404,16 @@
         "picks": [
           "Intelligence"
         ]
-      }
+      },
+      "resources": [
+        {
+          "action_name": "Living Shadow: Lengthened Strike",
+          "max_uses": 2,
+          "uses_remaining": 2,
+          "number_used": 0,
+          "reset_type": "Long Rest"
+        }
+      ]
     }
   ],
   "personality": {
