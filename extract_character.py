@@ -386,48 +386,67 @@ def gather_classes(data, choice_index, proficiency, ability_scores):
     return classes
 
 
-def gather_proficiencies(data):
-    """Split proficiency modifiers into saving throws, skills, tools, weapons, armor."""
-    saving_throws, skills, tools, weapons, armor, languages, resistances = ([] for _ in range(7))
-    expertise_skills = set()
+def gather_proficiencies(data, ability_scores, proficiency):
+    """Split proficiency modifiers into saving throws, skills, tools, weapons, armor.
+    Every skill and every saving throw is included (not just the ones the character is
+    proficient in), each carrying its computed final bonus: ability modifier, plus the
+    proficiency bonus once if proficient or twice if expertise (no expertise-on-saves
+    modifier type was found in any of the four exports this script was tested against,
+    so saving throws only ever get the single proficiency bonus, per core 5e rules)."""
+    saving_throw_abilities, tools, weapons, armor, languages, resistances = (set() for _ in range(6))
+    proficient_skills, expertise_skills = set(), set()
 
     for _category, m in iter_modifiers(data):
         mtype = m.get("type")
         sub = m.get("subType") or ""
         if mtype == "proficiency":
             if sub.endswith("-saving-throws"):
-                saving_throws.append(sub.replace("-saving-throws", "").replace("-", " ").title())
+                saving_throw_abilities.add(sub.replace("-saving-throws", "").replace("-", " ").title())
             elif sub in SKILL_ABILITY:
-                skills.append(sub)
+                proficient_skills.add(sub)
             elif "weapon" in sub or sub.endswith("-weapons"):
-                weapons.append(m.get("friendlySubtypeName") or sub)
+                weapons.add(m.get("friendlySubtypeName") or sub)
             elif "armor" in sub or "shield" in sub:
-                armor.append(m.get("friendlySubtypeName") or sub)
+                armor.add(m.get("friendlySubtypeName") or sub)
             else:
-                tools.append(m.get("friendlySubtypeName") or sub)
+                tools.add(m.get("friendlySubtypeName") or sub)
         elif mtype == "expertise" and sub in SKILL_ABILITY:
             expertise_skills.add(sub)
         elif mtype == "language":
-            languages.append(m.get("friendlySubtypeName") or sub.title())
+            languages.add(m.get("friendlySubtypeName") or sub.title())
         elif mtype == "resistance":
-            resistances.append(m.get("friendlySubtypeName") or sub.title())
+            resistances.add(m.get("friendlySubtypeName") or sub.title())
 
     skills_out = {}
-    for slug in sorted(set(skills) | expertise_skills):
+    for slug, ability in sorted(SKILL_ABILITY.items()):
+        proficient = slug in proficient_skills or slug in expertise_skills
+        expertise = slug in expertise_skills
+        ability_mod = ability_scores[ability]["modifier"]
+        multiplier = 2 if expertise else (1 if proficient else 0)
         skills_out[slug.replace("-", " ").title()] = {
-            "ability": SKILL_ABILITY.get(slug, "?"),
-            "proficient": slug in skills or slug in expertise_skills,
-            "expertise": slug in expertise_skills,
+            "ability": ability,
+            "proficient": proficient,
+            "expertise": expertise,
+            "bonus": ability_mod + proficiency * multiplier,
+        }
+
+    saving_throws_out = {}
+    for name in ABILITY_NAMES.values():
+        proficient = name in saving_throw_abilities
+        ability_mod = ability_scores[name]["modifier"]
+        saving_throws_out[name] = {
+            "proficient": proficient,
+            "bonus": ability_mod + (proficiency if proficient else 0),
         }
 
     return {
-        "saving_throws": sorted(set(saving_throws)),
+        "saving_throws": saving_throws_out,
         "skills": skills_out,
-        "tools": sorted(set(tools)),
-        "weapons": sorted(set(weapons)),
-        "armor": sorted(set(armor)),
-        "languages": sorted(set(languages)),
-        "damage_resistances": sorted(set(resistances)),
+        "tools": sorted(tools),
+        "weapons": sorted(weapons),
+        "armor": sorted(armor),
+        "languages": sorted(languages),
+        "damage_resistances": sorted(resistances),
     }
 
 
@@ -912,8 +931,7 @@ def gather_computed_stats(data, ability_scores, proficiency, proficiencies):
             "spell_attack_bonus": proficiency + mod,
         })
 
-    perception = proficiencies["skills"].get("Perception")
-    passive_perception = 10 + ability_scores["Wisdom"]["modifier"] + (proficiency if perception and perception["proficient"] else 0)
+    passive_perception = 10 + proficiencies["skills"]["Perception"]["bonus"]
 
     return {
         "passive_perception": passive_perception,
@@ -928,7 +946,7 @@ def extract(raw):
     level = total_character_level(data)
     proficiency = proficiency_bonus(level)
     ability_scores = gather_ability_scores(data)
-    proficiencies = gather_proficiencies(data)
+    proficiencies = gather_proficiencies(data, ability_scores, proficiency)
     choice_index = build_choice_index(data)
     weapon_proficiency_slugs = gather_proficiency_subtype_slugs(data)
 
@@ -992,8 +1010,10 @@ def to_text_summary(c):
     for sc in stats["spellcasting"]:
         lines.append(f"Spell Save DC ({sc['class']}): {sc['spell_save_dc']}  |  Spell Attack: {fmt_mod(sc['spell_attack_bonus'])}")
     lines.append("")
-    lines.append("Saving Throw Proficiencies: " + ", ".join(c["proficiencies"]["saving_throws"]))
-    prof_skills = [k for k, v in c["proficiencies"]["skills"].items() if v["proficient"]]
+    saves = c["proficiencies"]["saving_throws"]
+    lines.append("Saving Throws: " + ", ".join(f"{name} {fmt_mod(v['bonus'])}" for name, v in saves.items()))
+    prof_skills = [f"{name} {fmt_mod(v['bonus'])}{'*' if v['expertise'] else ''}"
+                   for name, v in c["proficiencies"]["skills"].items() if v["proficient"]]
     lines.append("Skill Proficiencies: " + ", ".join(prof_skills))
     if c["feats"]:
         lines.append("")

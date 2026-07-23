@@ -148,30 +148,140 @@
     "walk": 30
   },
   "proficiencies": {
-    "saving_throws": [
-      "Intelligence",
-      "Wisdom"
-    ],
+    "saving_throws": {
+      "Strength": {
+        "proficient": false,
+        "bonus": -1
+      },
+      "Dexterity": {
+        "proficient": false,
+        "bonus": 1
+      },
+      "Constitution": {
+        "proficient": false,
+        "bonus": 3
+      },
+      "Intelligence": {
+        "proficient": true,
+        "bonus": 5
+      },
+      "Wisdom": {
+        "proficient": true,
+        "bonus": 2
+      },
+      "Charisma": {
+        "proficient": false,
+        "bonus": 0
+      }
+    },
     "skills": {
+      "Acrobatics": {
+        "ability": "Dexterity",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 1
+      },
+      "Animal Handling": {
+        "ability": "Wisdom",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
       "Arcana": {
         "ability": "Intelligence",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 5
+      },
+      "Athletics": {
+        "ability": "Strength",
+        "proficient": false,
+        "expertise": false,
+        "bonus": -1
+      },
+      "Deception": {
+        "ability": "Charisma",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
       },
       "History": {
         "ability": "Intelligence",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 5
+      },
+      "Insight": {
+        "ability": "Wisdom",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Intimidation": {
+        "ability": "Charisma",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Investigation": {
+        "ability": "Intelligence",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 3
       },
       "Medicine": {
         "ability": "Wisdom",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 2
+      },
+      "Nature": {
+        "ability": "Intelligence",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 3
+      },
+      "Perception": {
+        "ability": "Wisdom",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Performance": {
+        "ability": "Charisma",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
+      },
+      "Persuasion": {
+        "ability": "Charisma",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
       },
       "Religion": {
         "ability": "Intelligence",
         "proficient": true,
-        "expertise": false
+        "expertise": false,
+        "bonus": 5
+      },
+      "Sleight Of Hand": {
+        "ability": "Dexterity",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 1
+      },
+      "Stealth": {
+        "ability": "Dexterity",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 1
+      },
+      "Survival": {
+        "ability": "Wisdom",
+        "proficient": false,
+        "expertise": false,
+        "bonus": 0
       }
     },
     "tools": [
