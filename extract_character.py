@@ -547,14 +547,53 @@ def gather_race(data, choice_index, resource_index, proficiency, ability_scores)
     }
 
 
-def gather_background(data):
+def gather_background(data, proficiency, ability_scores):
+    """Pull the background's own write-up plus its granted feature's full description,
+    the same way class/race features already get their full text.
+
+    featureDescription is an empty string on the background definition itself in all
+    four exports this script was tested against - under the 2024 rules a background's
+    "feature" is really the Origin feat it grants, and that feat's actual description
+    lives in data.feats, not on the background. Resolve it there: first by an exact name
+    match (featureName == the feat's own name, true for 3 of the 4 exports), falling
+    back to whichever feat is tagged "Origin" (same tag gather_feats already uses) for
+    backgrounds whose featureName is a generic placeholder like "A Dark Gift feat of
+    your choice" rather than a fixed feat name (true for the 4th, Dorian's Mist
+    Wanderer, where the real granted feat - Sharp Eye - only resolves via the tag)."""
     bg = (data.get("background") or {}).get("definition") or {}
+    feature_name = bg.get("featureName")
+
+    feature_description = None
+    if bg.get("featureDescription"):
+        feature_description = render_templates(strip_html(bg["featureDescription"]),
+                                                 proficiency, ability_scores=ability_scores)
+    else:
+        origin_feat = None
+        for feat in data.get("feats", []):
+            fd = feat.get("definition", feat)
+            if fd.get("name") == feature_name:
+                origin_feat = fd
+                break
+        if origin_feat is None:
+            for feat in data.get("feats", []):
+                fd = feat.get("definition", feat)
+                tags = [c.get("tagName") for c in (fd.get("categories") or [])]
+                if "Origin" in tags:
+                    origin_feat = fd
+                    break
+        if origin_feat is not None:
+            feature_description = render_templates(
+                strip_html(origin_feat.get("snippet") or origin_feat.get("description")),
+                proficiency, ability_scores=ability_scores)
+
     return {
         "name": bg.get("name"),
+        "description": strip_html(bg.get("description")),
         "skill_proficiencies": bg.get("skillProficienciesDescription"),
         "tool_proficiencies": bg.get("toolProficienciesDescription"),
         "languages": bg.get("languagesDescription"),
-        "feature_name": bg.get("featureName"),
+        "feature_name": feature_name,
+        "feature_description": feature_description,
     }
 
 
@@ -1108,7 +1147,7 @@ def extract(raw):
         "experience_points": data.get("currentXp"),
         "inspiration": data.get("inspiration", False),
         "race": gather_race(data, choice_index, resource_index, proficiency, ability_scores),
-        "background": gather_background(data),
+        "background": gather_background(data, proficiency, ability_scores),
         "classes": gather_classes(data, choice_index, resource_index, proficiency, ability_scores),
         "ability_scores": ability_scores,
         "hit_points": gather_hit_points(data),

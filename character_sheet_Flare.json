@@ -74,10 +74,12 @@
   },
   "background": {
     "name": "Scribe",
+    "description": "Ability Scores:\u00a0Dexterity, Intelligence, Wisdom\nFeat:\u00a0Skilled\nSkill Proficiencies: Investigation and Perception\nTool Proficiency:\u00a0Calligrapher's Tools\nEquipment: Choose A or B: (A) Calligrapher's Supplies, Fine Clothes, Lamp, Oil, Parchment (12 sheets), 23 GP; or (B) 50 GP\n\r\nYou spent formative years in a scriptorium, a monastery dedicated to the preservation of knowledge, or a government agency, where you learned to write with a clear hand and produce finely written texts. Perhaps you scribed government documents or copied tomes of literature. You might have some skill as a writer of poetry, narrative, or scholarly research. Above all, you have a careful attention to detail, helping you avoid introducing mistakes to the documents you copy and create.",
     "skill_proficiencies": "Investigation and Perception",
     "tool_proficiencies": "Calligrapher's Supplies",
     "languages": "",
-    "feature_name": "Skilled"
+    "feature_name": "Skilled",
+    "feature_description": "You gain proficiency in any combination of three skills or tools of your choice.\r\n\r\nRepeatable. You can take this feat more than once."
   },
   "classes": [
     {

@@ -61,10 +61,12 @@
   },
   "background": {
     "name": "Mist Wanderer",
+    "description": "Ability Scores: Dexterity, Constitution, Wisdom\r\nFeat: A Dark Gift feat of your choice (see \u201cFeats\u201d later in this chapter; Mist Walker is recommended)\r\nSkill Proficiencies: Survival and Stealth\r\nTool Proficiencies: Choose one kind of Artisan\u2019s Tools\r\nEquipment: Choose A or B: (A) Artisan\u2019s Tools (same as above), Lamp, Oil (5 flasks), Pouch, Rope, Tinderbox, Traveler\u2019s Clothes, and 30 GP; or (B) 50 GP\r\n\r\n\r\nYou once knew your home. But one day, the Mists rose and drew you into a Domain of Dread. Ever since, you have wandered between domains, braving the mercurial Mists as you search for a way home. Your time in these cursed realms has changed you, yet you find solace in communities of fellow wanderers throughout the Mists.",
     "skill_proficiencies": "Survival and Stealth",
     "tool_proficiencies": "<em>Choose one kind of Artisan\u2019s Tools</em>",
     "languages": "",
-    "feature_name": "A Dark Gift feat of your choice"
+    "feature_name": "A Dark Gift feat of your choice",
+    "feature_description": "You can give yourself Advantage on any ability check made as part of the Search or Study action. You can use this feature 2 times per Long Rest. If the check fails, the use of this feature isn\u2019t expended."
   },
   "classes": [
     {

@@ -76,10 +76,12 @@
   },
   "background": {
     "name": "Acolyte",
+    "description": "Ability Scores:\u00a0Intelligence, Wisdom, Charisma\nFeat:\u00a0Magic Initiate (Cleric)\nSkill Proficiencies: Insight and Religion\nTool Proficiency:\u00a0Calligrapher's Supplies\nEquipment: Choose A or B: (A) Calligrapher's Supplies, Book (prayers), Holy Symbol, Parchment (10 sheets), Robe, 8 GP; or (B) 50 GP\n\r\nYou devoted yourself to service in a temple, either nestled in a town or secluded in a sacred grove. There you performed rites in honor of a god or pantheon. You served under a priest and studied religion. Thanks to your priest\u2019s instruction and your own devotion, you also learned how to channel a modicum of divine power in service to your place of worship and the people who prayed there.",
     "skill_proficiencies": "Insight and Religion",
     "tool_proficiencies": "Calligrapher's Supplies",
     "languages": "",
-    "feature_name": "Magic Initiate (Cleric)"
+    "feature_name": "Magic Initiate (Cleric)",
+    "feature_description": "Two Cantrips. You learn two cantrips of your choice from the Cleric spell list. Int., Wis., or Cha. is your spellcasting ability for this feat's spells.\r\n\r\nLevel 1 Spell. Choose a level 1 spell from the Cleric spell list. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have.\r\n\r\nSpell Change. Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list.\r\n\r\nRepeatable. You can take this feat more than once, but you must choose a different spell list each time."
   },
   "classes": [
     {
