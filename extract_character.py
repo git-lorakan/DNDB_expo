@@ -540,22 +540,27 @@ def gather_computed_stats(data, ability_scores, proficiency, proficiencies):
         armor_class = {"value": 10 + dex_mod, "basis": "unarmored"}
     else:
         base_ac = equipped_armor.get("armorClass") or 10
-        item_type = equipped_armor.get("type") or ""
-        if "Heavy" in item_type:
+        # armorTypeId (1=light, 2=medium, 3=heavy) is the reliable signal here - the
+        # "type" string is only populated for heavy armor in observed exports and is
+        # empty for both light and medium, so it can't distinguish the two.
+        armor_type_id = equipped_armor.get("armorTypeId")
+        if armor_type_id == 3:
             value = base_ac
-        elif "Medium" in item_type:
+        elif armor_type_id == 2:
             value = base_ac + min(dex_mod, 2)
+        elif armor_type_id == 1:
+            value = base_ac + dex_mod
         else:
-            value = base_ac + dex_mod  # Light armor, or an unrecognized armor "type" string
-        armor_class = {
-            "value": value,
-            "basis": equipped_armor.get("name"),
-            "verified": False,
-            "note": ("Armor-type Dex-cap handling (light/medium/heavy) is unverified against a "
-                     "real armored-character export - this character has no armor equipped, so "
-                     "this code path has only been exercised against synthetic data. Recheck the "
-                     "'type' string convention DDB uses for actual armor items before trusting this."),
-        }
+            value = base_ac + dex_mod
+        armor_class = {"value": value, "basis": equipped_armor.get("name")}
+        if armor_type_id not in (1, 2, 3):
+            armor_class["verified"] = False
+            armor_class["note"] = (
+                f"Equipped armor ({equipped_armor.get('name')!r}) has no recognized "
+                f"armorTypeId ({armor_type_id!r}); fell back to an uncapped Dex modifier, "
+                "which is only correct for light armor. Recheck this item's data before "
+                "trusting this AC value."
+            )
     if equipped_shield:
         armor_class["value"] += 2
         armor_class["shield"] = True
