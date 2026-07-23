@@ -396,32 +396,6 @@
       }
     },
     {
-      "name": "Character Threads",
-      "summary": "Threads are aspects added to characters at any time during their career that have a specific short or long-term goal.",
-      "is_origin_feat": false,
-      "tags": [
-        "__DISGUISE_FEAT",
-        "__DISPLAY_WITH_DATA_ORIGIN"
-      ],
-      "choice": {
-        "status": "unresolved_in_source",
-        "picks": []
-      }
-    },
-    {
-      "name": "Runestones",
-      "summary": "At the beginning of the Northlands Sagas adventure path, each player should draw one Runestone randomly.",
-      "is_origin_feat": false,
-      "tags": [
-        "__DISGUISE_FEAT",
-        "__DISPLAY_WITH_DATA_ORIGIN"
-      ],
-      "choice": {
-        "status": "unresolved_in_source",
-        "picks": []
-      }
-    },
-    {
       "name": "Gathered Whispers",
       "summary": "Spirit Whispers. You learn the Message spell and can cast it without Material components. Additionally, you always have the Augury spell prepared, and can cast it without a spell slot or spell components once per Long Rest. You can also cast the spell using any spell slots you have. Int., Wis., or Cha. is your spellcasting ability for this benefit.\r\n\r\nUnearthly Scream. When you are hit by an attack roll, you can take a Reaction to add your Proficiency Bonus to your AC against that attack. You can use this benefit 2 times per Long Rest.\r\n\r\nVoices from Beyond. Immediately after you make a D20 Test and roll a 1 on the d20, make a Wisdom saving throw (DC 15). On a failed save, you have the Deafened condition until the end of your next turn. While Deafened, you have Disadvantage on ability checks and attack rolls.",
       "is_origin_feat": false,

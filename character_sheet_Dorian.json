@@ -345,32 +345,6 @@
       }
     },
     {
-      "name": "Character Threads",
-      "summary": "Threads are aspects added to characters at any time during their career that have a specific short or long-term goal.",
-      "is_origin_feat": false,
-      "tags": [
-        "__DISGUISE_FEAT",
-        "__DISPLAY_WITH_DATA_ORIGIN"
-      ],
-      "choice": {
-        "status": "unresolved_in_source",
-        "picks": []
-      }
-    },
-    {
-      "name": "Runestones",
-      "summary": "At the beginning of the Northlands Sagas adventure path, each player should draw one Runestone randomly.",
-      "is_origin_feat": false,
-      "tags": [
-        "__DISGUISE_FEAT",
-        "__DISPLAY_WITH_DATA_ORIGIN"
-      ],
-      "choice": {
-        "status": "unresolved_in_source",
-        "picks": []
-      }
-    },
-    {
       "name": "Mist Walker",
       "summary": "Domain Traveler. When you enter the Mists to reach a specific domain, you are treated as if you possess a Mist talisman for that domain. You must know the name of the chosen domain, but you don\u2019t need to have previously visited. This trait doesn\u2019t allow you to bypass domain borders closed by a Darklord\u2019s will.\r\n\r\nMist Walk. When you take damage or fail a Grappled or Restrained saving throw, you can take a Reaction and teleport up to 15 ft. to an unoccupied space you can see. You can use this feature 2 times per Long Rest.\r\n\r\nPoisoned Roots. When you finish a Long Rest, the 10-mile radius around you becomes a vitality siphon. Whenever you finish a Short Rest in that area, make a Con. saving throw (DC 15). On a failed save, you get no benefits from finishing that rest.",
       "is_origin_feat": false,
