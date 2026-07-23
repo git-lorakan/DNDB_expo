@@ -45,6 +45,14 @@ ACTIVATION_TYPES = {1: "Action", 2: "No Action", 3: "Bonus Action", 4: "Reaction
                      6: "Minute", 7: "Hour", 8: "Special"}
 COMPONENT_TYPES = {1: "V", 2: "S", 3: "M"}
 
+# Known DDBeyond exporter artifacts: these show up as spurious entries in data.feats
+# regardless of race/class/background (confirmed present, identically, in all four
+# tracked exports - Horns, Sin, Flare, Dorian - which otherwise share nothing), and the
+# user who owns these exports has identified them as export-tool errors rather than
+# real granted feats. Excluded by name rather than by their "__DISGUISE_FEAT" tag, since
+# that tag is also shared by real homebrew feats (e.g. Dark Bargain) that should stay.
+EXCLUDED_FEAT_NAMES = {"Runestones", "Character Threads"}
+
 SKILL_ABILITY = {
     "acrobatics": "Dexterity", "animal-handling": "Wisdom", "arcana": "Intelligence",
     "athletics": "Strength", "deception": "Charisma", "history": "Intelligence",
@@ -635,6 +643,8 @@ def gather_feats(data, choice_index, resource_index, proficiency, ability_scores
     feats = []
     for f in data.get("feats", []):
         d = f.get("definition", f)
+        if d.get("name") in EXCLUDED_FEAT_NAMES:
+            continue
         summary = render_templates(strip_html(d.get("snippet") or d.get("description")),
                                     proficiency, ability_scores=ability_scores)
         tags = [c.get("tagName") for c in (d.get("categories") or []) if c.get("tagName")]

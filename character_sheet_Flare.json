@@ -374,32 +374,6 @@
       }
     },
     {
-      "name": "Character Threads",
-      "summary": "Threads are aspects added to characters at any time during their career that have a specific short or long-term goal.",
-      "is_origin_feat": false,
-      "tags": [
-        "__DISGUISE_FEAT",
-        "__DISPLAY_WITH_DATA_ORIGIN"
-      ],
-      "choice": {
-        "status": "unresolved_in_source",
-        "picks": []
-      }
-    },
-    {
-      "name": "Runestones",
-      "summary": "At the beginning of the Northlands Sagas adventure path, each player should draw one Runestone randomly.",
-      "is_origin_feat": false,
-      "tags": [
-        "__DISGUISE_FEAT",
-        "__DISPLAY_WITH_DATA_ORIGIN"
-      ],
-      "choice": {
-        "status": "unresolved_in_source",
-        "picks": []
-      }
-    },
-    {
       "name": "Symbiotic Being",
       "summary": "Entwined Existence. The symbiote can\u2019t be targeted. If you die, so does your symbiote. If you are returned to life, your symbiote also revives.\r\n\r\nSecond Mind. You gain proficiency in a skill, and also know one additional language of your choice.\r\n\r\nSustained Symbiosis. When you fail a saving throw, you can take a Reaction and expend one of your Hit Dice. Roll the die and add the number rolled to the saving throw. You can use this feature 2 times per Long Rest.\r\n\r\nSymbiotic Agenda. Immediately after you make a D20 Test and roll a 1 on the d20, make a Cha. saving throw (DC 15). On a failed save, you have the Charmed condition for 1d12 hours. While Charmed, you must try to follow the symbiote\u2019s commands and further its goals. Whenever you take damage, you can repeat this save, ending the effect on a success. You might make this saving throw whenever you act contrary to the symbiote\u2019s agenda (DM\u2019s discretion).",
       "is_origin_feat": false,
