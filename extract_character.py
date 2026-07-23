@@ -36,6 +36,15 @@ WEAPON_CATEGORY_SLUGS = {1: "simple-weapons", 2: "martial-weapons"}
 # categoryId 2, all matched against a "martial-weapons" proficiency modifier) as well as
 # simple weapons (Dagger/Quarterstaff, categoryId 1) - this mapping is no longer a guess.
 
+# Spell/feature activation.activationType. 1, 3, and 6 are directly confirmed against
+# real spells across the four exports this script was tested against (Fire Bolt =
+# 1/Action; Hunter's Mark & Ensnaring Strike = 3/Bonus Action; Mending, Identify, and
+# Alarm = 6/Minute, all matching their real 5e casting times). 4/7/8 are the standard
+# public DDB convention but have no confirmed example here.
+ACTIVATION_TYPES = {1: "Action", 2: "No Action", 3: "Bonus Action", 4: "Reaction",
+                     6: "Minute", 7: "Hour", 8: "Special"}
+COMPONENT_TYPES = {1: "V", 2: "S", 3: "M"}
+
 SKILL_ABILITY = {
     "acrobatics": "Dexterity", "animal-handling": "Wisdom", "arcana": "Intelligence",
     "athletics": "Strength", "deception": "Charisma", "history": "Intelligence",
@@ -592,22 +601,91 @@ def gather_inventory(data, ability_scores, proficiency, weapon_proficiency_slugs
     return items
 
 
+def format_dice_or_value(die, value):
+    if die and die.get("diceString"):
+        return die["diceString"]
+    if value is not None:
+        return str(value)
+    return None
+
+
+def gather_spell_scaling(sd):
+    """Pull damage/healing dice and their higher-level scaling out of modifiers[].die /
+    modifiers[].atHigherLevels.higherLevelDefinitions, plus the spell's own top-level
+    atHigherLevels (additional targets/attacks/area, when populated - empty in every
+    spell across the four exports this was tested against, but surfaced if present).
+
+    scaleType tells you which kind of "level" the scaling keys off - "characterlevel"
+    for cantrip upgrades (e.g. Fire Bolt's extra die at character levels 5/11/17) vs
+    "spellscale" for extra spell-slot levels above the spell's base level (e.g. Burning
+    Hands' extra die per slot level above 1st) - confirmed against both cases here."""
+    effects = []
+    for m in sd.get("modifiers") or []:
+        base = format_dice_or_value(m.get("die"), m.get("value"))
+        scaling = []
+        for hld in ((m.get("atHigherLevels") or {}).get("higherLevelDefinitions") or []):
+            amount = format_dice_or_value(hld.get("dice"), hld.get("value"))
+            if amount:
+                scaling.append({"level": hld.get("level"), "amount": amount})
+        if base is None and not scaling:
+            continue
+        effects.append({
+            "type": m.get("friendlyTypeName") or m.get("type"),
+            "subtype": m.get("friendlySubtypeName") or m.get("subType"),
+            "base_amount": base,
+            "scaling": scaling,
+        })
+
+    other_scaling = {k: v for k, v in (sd.get("atHigherLevels") or {}).items() if v}
+    return {"scale_type": sd.get("scaleType"), "effects": effects, "other_scaling": other_scaling}
+
+
 def gather_spells(data):
-    """Combine every spell source (race/class/background/item/feat + per-class spell lists)."""
+    """Combine every spell source (race/class/background/item/feat + per-class spell lists)
+    with full casting detail, not just name/level/school."""
     result = {}
 
     def add(source_name, spell_entries):
         bucket = result.setdefault(source_name, [])
         for s in spell_entries:
             d = s.get("definition") or {}
-            bucket.append({
+            rng = d.get("range") or {}
+            dur = d.get("duration") or {}
+            act = d.get("activation") or {}
+            entry = {
                 "name": d.get("name"),
                 "level": d.get("level"),
                 "school": d.get("school"),
                 "concentration": d.get("concentration", False),
                 "ritual": d.get("ritual", False),
                 "prepared": s.get("prepared", s.get("alwaysPrepared", False)),
-            })
+                "casting_time": {
+                    "amount": act.get("activationTime"),
+                    "unit": ACTIVATION_TYPES.get(act.get("activationType"), act.get("activationType")),
+                    "description": d.get("castingTimeDescription") or None,
+                },
+                "range": {
+                    "origin": rng.get("origin"),
+                    "distance_ft": rng.get("rangeValue"),
+                    "area_type": rng.get("aoeType"),
+                    "area_size": rng.get("aoeValue"),
+                },
+                "duration": {
+                    "type": dur.get("durationType"),
+                    "interval": dur.get("durationInterval"),
+                    "unit": dur.get("durationUnit"),
+                },
+                "components": {
+                    "types": [COMPONENT_TYPES.get(c, c) for c in (d.get("components") or [])],
+                    "material_cost": d.get("componentsDescription") or None,
+                },
+                "requires_attack_roll": d.get("requiresAttackRoll", False),
+                "requires_saving_throw": d.get("requiresSavingThrow", False),
+                "save_ability": ABILITY_NAMES.get(d.get("saveDcAbilityId")),
+                "description": strip_html(d.get("description")),
+                **gather_spell_scaling(d),
+            }
+            bucket.append(entry)
 
     spells = data.get("spells") or {}
     for source_name, spell_entries in spells.items():

@@ -520,7 +520,57 @@
         "school": "Necromancy",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": null,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": true,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "Channeling the chill of the grave, make a melee spell attack against a target within reach. On a hit, the target takes 1d10 Necrotic damage, and it can\u2019t regain Hit Points until the end of your next turn.\n\r\nCantrip Upgrade. The damage increases by 1d10 when you reach levels 5 (2d10), 11 (3d10), and 17 (4d10).",
+        "scale_type": "characterlevel",
+        "effects": [
+          {
+            "type": "Damage",
+            "subtype": "Necrotic",
+            "base_amount": "1d10",
+            "scaling": [
+              {
+                "level": 5,
+                "amount": "2d10"
+              },
+              {
+                "level": 11,
+                "amount": "3d10"
+              },
+              {
+                "level": 17,
+                "amount": "4d10"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Thaumaturgy",
@@ -528,7 +578,36 @@
         "school": "Transmutation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 30,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 1,
+          "unit": "Minute"
+        },
+        "components": {
+          "types": [
+            "V"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You manifest a minor wonder within range. You create one of the effects below within range. If you cast this spell multiple times, you can have up to three of its 1-minute effects active at a time.\n\r\nAltered Eyes. You alter the appearance of your eyes for 1 minute.\n\r\nBooming Voice. Your voice booms up to three times as loud as normal for 1 minute. For the duration, you have Advantage on Charisma (Intimidation) checks.\n\r\nFire Play. You cause flames to flicker, brighten, dim, or change color for 1 minute.\n\r\nInvisible Hand. You instantaneously cause an unlocked door or window to fly open or slam shut.\n\r\nPhantom Sound. You create an instantaneous sound that originates from a point of your choice within range, such as a rumble of thunder, the cry of a raven, or ominous whispers.\n\r\nTremors. You cause harmless tremors in the ground for 1 minute.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       }
     ],
     "feat": [
@@ -538,7 +617,37 @@
         "school": "Conjuration",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 30,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 1,
+          "unit": "Minute"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "A spectral, floating hand appears at a point you choose within range. The hand lasts for the duration. The hand vanishes if it is ever more than 30 feet away from you or if you cast this spell again.\n\r\nWhen you cast the spell, you can use the hand to manipulate an object, open an unlocked door or container, stow or retrieve an item from an open container, or pour the contents out of a vial.\n\r\nAs a Magic action on your later turns, you can control the hand thus again. As part of that action, you can move the hand up to 30 feet.\n\r\nThe hand can\u2019t attack, activate magic items, or carry more than 10 pounds.",
+        "scale_type": "characterlevel",
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Mending",
@@ -546,7 +655,38 @@
         "school": "Transmutation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Minute",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "two lodestones"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin. As long as the break or tear is no larger than 1 foot in any dimension, you mend it, leaving no trace of the former damage.\n\r\nThis spell can physically repair a magic item, but it can\u2019t restore magic to such an object.",
+        "scale_type": "characterlevel",
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Prestidigitation",
@@ -554,7 +694,37 @@
         "school": "Transmutation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 10,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 1,
+          "unit": "Hour"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You create a magical effect within range. Choose the effect from the options below. If you cast this spell multiple times, you can have up to three of its non-instantaneous effects active at a time.\n\r\nSensory Effect. You create an instantaneous, harmless sensory effect, such as a shower of sparks, a puff of wind, faint musical notes, or an odd odor.\n\r\nFire Play. You instantaneously light or snuff out a candle, a torch, or a small campfire.\n\r\nClean or Soil. You instantaneously clean or soil an object no larger than 1 cubic foot.\n\r\nMinor Sensation. You chill, warm, or flavor up to 1 cubic foot of nonliving material for 1 hour.\n\r\nMagic Mark. You make a color, a small mark, or a symbol appear on an object or a surface for 1 hour.\n\r\nMinor Creation. You create a nonmagical trinket or an illusory image that can fit in your hand. It lasts until the end of your next turn. A trinket can deal no damage and has no monetary worth.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Sleep",
@@ -562,7 +732,38 @@
         "school": "Enchantment",
         "concentration": true,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 60,
+          "area_type": "Sphere",
+          "area_size": 5
+        },
+        "duration": {
+          "type": "Concentration",
+          "interval": 1,
+          "unit": "Minute"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "a pinch of sand or rose petals"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": true,
+        "save_ability": "Wisdom",
+        "description": "Each creature of your choice in a 5-foot-radius Sphere centered on a point within range must succeed on a Wisdom saving throw or have the Incapacitated condition until the end of its next turn, at which point it must repeat the save. If the target fails the second save, the target has the Unconscious condition for the duration. The spell ends on a target if it takes damage or someone within 5 feet of it takes an action to shake it out of the spell\u2019s effect.\n\r\nCreatures that don\u2019t sleep, such as elves, or that have Immunity to the Exhaustion condition automatically succeed on saves against this spell.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       }
     ],
     "Wizard": [
@@ -572,7 +773,57 @@
         "school": "Evocation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 120,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": true,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You hurl a mote of fire at a creature or an object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 Fire damage. A flammable object hit by this spell starts burning if it isn\u2019t being worn or carried.\n\r\nCantrip Upgrade. The damage increases by 1d10 when you reach levels 5 (2d10), 11 (3d10), and 17 (4d10).",
+        "scale_type": "characterlevel",
+        "effects": [
+          {
+            "type": "Damage",
+            "subtype": "Fire",
+            "base_amount": "1d10",
+            "scaling": [
+              {
+                "level": 5,
+                "amount": "2d10"
+              },
+              {
+                "level": 11,
+                "amount": "3d10"
+              },
+              {
+                "level": 17,
+                "amount": "4d10"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Mending",
@@ -580,7 +831,38 @@
         "school": "Transmutation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Minute",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "two lodestones"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "This spell repairs a single break or tear in an object you touch, such as a broken chain link, two halves of a broken key, a torn cloak, or a leaking wineskin. As long as the break or tear is no larger than 1 foot in any dimension, you mend it, leaving no trace of the former damage.\n\r\nThis spell can physically repair a magic item, but it can\u2019t restore magic to such an object.",
+        "scale_type": "characterlevel",
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Poison Spray",
@@ -588,7 +870,57 @@
         "school": "Necromancy",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 30,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": true,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You spray toxic mist at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d12 Poison damage.\n\r\nCantrip Upgrade. The damage increases by 1d12 when you reach levels 5 (2d12), 11 (3d12), and 17 (4d12).",
+        "scale_type": "characterlevel",
+        "effects": [
+          {
+            "type": "Damage",
+            "subtype": "Poison",
+            "base_amount": "1d12",
+            "scaling": [
+              {
+                "level": 5,
+                "amount": "2d12"
+              },
+              {
+                "level": 11,
+                "amount": "3d12"
+              },
+              {
+                "level": 17,
+                "amount": "4d12"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Alarm",
@@ -596,7 +928,38 @@
         "school": "Abjuration",
         "concentration": false,
         "ritual": true,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Minute",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 30,
+          "area_type": "Cube",
+          "area_size": 20
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 8,
+          "unit": "Hour"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "a bell and silver wire"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You set an alarm against intrusion. Choose a door, a window, or an area within range that is no larger than a 20-foot Cube. Until the spell ends, an alarm alerts you whenever a creature touches or enters the warded area. When you cast the spell, you can designate creatures that won\u2019t set off the alarm. You also choose whether the alarm is audible or mental:\n\r\nAudible Alarm. The alarm produces the sound of a handbell for 10 seconds within 60 feet of the warded area.\n\r\nMental Alarm. You are alerted by a mental ping if you are within 1 mile of the warded area. This ping awakens you if you\u2019re asleep.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Burning Hands",
@@ -604,7 +967,49 @@
         "school": "Evocation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Self",
+          "distance_ft": 0,
+          "area_type": "Cone",
+          "area_size": 15
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": true,
+        "save_ability": "Dexterity",
+        "description": "A thin sheet of flames shoots forth from you. Each creature in a 15-foot Cone makes a Dexterity saving throw, taking 3d6 Fire damage on a failed save or half as much damage on a successful one.\n\r\nFlammable objects in the Cone that aren\u2019t being worn or carried start burning.\n\r\nUsing a Higher-Level Spell Slot. The damage increases by 1d6 for each spell slot level above 1.",
+        "scale_type": "spellscale",
+        "effects": [
+          {
+            "type": "Damage",
+            "subtype": "Fire",
+            "base_amount": "3d6",
+            "scaling": [
+              {
+                "level": 1,
+                "amount": "1d6"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Comprehend Languages",
@@ -612,7 +1017,38 @@
         "school": "Divination",
         "concentration": false,
         "ritual": true,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Self",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 1,
+          "unit": "Hour"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "a pinch of soot and salt"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "For the duration, you understand the literal meaning of any language that you hear or see signed. You also understand any written language that you see, but you must be touching the surface on which the words are written. It takes about 1 minute to read one page of text. This spell doesn\u2019t decode symbols or secret messages.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Detect Magic",
@@ -620,7 +1056,37 @@
         "school": "Divination",
         "concentration": true,
         "ritual": true,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Self",
+          "distance_ft": 0,
+          "area_type": "Sphere",
+          "area_size": 30
+        },
+        "duration": {
+          "type": "Concentration",
+          "interval": 10,
+          "unit": "Minute"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "For the duration, you sense the presence of magical effects within 30 feet of yourself. If you sense such effects, you can take the Magic action to see a faint aura around any visible creature or object in the area that bears the magic, and if an effect was created by a spell, you learn the spell\u2019s school of magic.\n\r\nThe spell is blocked by 1 foot of stone, dirt, or wood; 1 inch of metal; or a thin sheet of lead.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Identify",
@@ -628,7 +1094,38 @@
         "school": "Divination",
         "concentration": false,
         "ritual": true,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Minute",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "a pearl worth 100+ GP"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You touch an object throughout the spell\u2019s casting. If the object is a magic item or some other magical object, you learn its properties and how to use them, whether it requires Attunement, and how many charges it has, if any. You learn whether any ongoing spells are affecting the item and what they are. If the item was created by a spell, you learn that spell\u2019s name.\n\r\nIf you instead touch a creature throughout the casting, you learn which ongoing spells, if any, are currently affecting it.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Mage Armor",
@@ -636,7 +1133,38 @@
         "school": "Abjuration",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 8,
+          "unit": "Hour"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "a piece of cured leather"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You touch a willing creature who isn\u2019t wearing armor. Until the spell ends, the target\u2019s base AC becomes 13 plus its Dexterity modifier. The spell ends early if the target dons armor.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       }
     ]
   },

@@ -493,7 +493,44 @@
         "school": "Divination",
         "concentration": true,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Touch",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Concentration",
+          "interval": 1,
+          "unit": "Minute"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You touch a willing creature and choose a skill. Until the spell ends, the creature adds 1d4 to any ability check using the chosen skill.",
+        "scale_type": "characterlevel",
+        "effects": [
+          {
+            "type": "Bonus",
+            "subtype": "Ability Checks",
+            "base_amount": "1d4",
+            "scaling": []
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Message",
@@ -501,7 +538,37 @@
         "school": "Transmutation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 120,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Time",
+          "interval": 1,
+          "unit": "Round"
+        },
+        "components": {
+          "types": [
+            "S",
+            "M"
+          ],
+          "material_cost": "a copper wire"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You point toward a creature within range and whisper a message. The target (and only the target) hears the message and can reply in a whisper that only you can hear.\n\r\nYou can cast this spell through solid objects if you are familiar with the target and know it is beyond the barrier. Magical silence; 1 foot of stone, metal, or wood; or a thin sheet of lead blocks the spell.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Sacred Flame",
@@ -509,7 +576,57 @@
         "school": "Evocation",
         "concentration": false,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 60,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S"
+          ],
+          "material_cost": null
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": true,
+        "save_ability": "Dexterity",
+        "description": "Flame-like radiance descends on a creature that you can see within range. The target must succeed on a Dexterity saving throw or take 1d8 Radiant damage. The target gains no benefit from Half Cover or Three-Quarters Cover for this save.\n\r\nCantrip Upgrade. The damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).",
+        "scale_type": "characterlevel",
+        "effects": [
+          {
+            "type": "Damage",
+            "subtype": "Radiant",
+            "base_amount": "1d8",
+            "scaling": [
+              {
+                "level": 5,
+                "amount": "2d8"
+              },
+              {
+                "level": 11,
+                "amount": "3d8"
+              },
+              {
+                "level": 17,
+                "amount": "4d8"
+              }
+            ]
+          }
+        ],
+        "other_scaling": {}
       },
       {
         "name": "Bless",
@@ -517,7 +634,73 @@
         "school": "Enchantment",
         "concentration": true,
         "ritual": false,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Action",
+          "description": null
+        },
+        "range": {
+          "origin": "Ranged",
+          "distance_ft": 30,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Concentration",
+          "interval": 1,
+          "unit": "Minute"
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "a Holy Symbol worth 5+ GP"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You bless up to three creatures within range. Whenever a target makes an attack roll or a saving throw before the spell ends, the target adds 1d4 to the attack roll or save.\n\r\nUsing a Higher-Level Spell Slot. You can target one additional creature for each spell slot level above 1.",
+        "scale_type": "spellscale",
+        "effects": [
+          {
+            "type": "Bonus",
+            "subtype": "Melee Weapon Attacks",
+            "base_amount": "1d4",
+            "scaling": []
+          },
+          {
+            "type": "Bonus",
+            "subtype": "Ranged Weapon Attacks",
+            "base_amount": "1d4",
+            "scaling": []
+          },
+          {
+            "type": "Bonus",
+            "subtype": "Spell Attacks",
+            "base_amount": "1d4",
+            "scaling": []
+          },
+          {
+            "type": "Bonus",
+            "subtype": "Saving Throws",
+            "base_amount": "1d4",
+            "scaling": []
+          }
+        ],
+        "other_scaling": {
+          "higherLevelDefinitions": [
+            {
+              "level": 1,
+              "typeId": 1,
+              "dice": null,
+              "value": 1,
+              "details": ""
+            }
+          ]
+        }
       },
       {
         "name": "Augury",
@@ -525,7 +708,38 @@
         "school": "Divination",
         "concentration": false,
         "ritual": true,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Minute",
+          "description": null
+        },
+        "range": {
+          "origin": "Self",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "specially marked sticks, bones, cards, or other divinatory tokens worth 25+ GP"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You receive an omen from an otherworldly entity about the results of a course of action that you plan to take within the next 30 minutes. The DM chooses the omen from the Omens table.\n\r\nOmens\r\n\r\n\r\nOmen\r\nFor Results That Will Be...\r\n\r\n\r\n\r\n\r\nWeal\r\nGood\r\n\r\n\r\nWoe\r\nBad\r\n\r\n\r\nWeal and woe\r\nGood and bad\r\n\r\n\r\nIndifference\r\nNeither good nor bad\r\n\r\n\r\n\r\nThe spell doesn\u2019t account for circumstances, such as other spells, that might change the results.\n\r\nIf you cast the spell more than once before finishing a Long Rest, there is a cumulative 25 percent chance for each casting after the first that you get no answer.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       },
       {
         "name": "Augury",
@@ -533,7 +747,38 @@
         "school": "Divination",
         "concentration": false,
         "ritual": true,
-        "prepared": false
+        "prepared": false,
+        "casting_time": {
+          "amount": 1,
+          "unit": "Minute",
+          "description": null
+        },
+        "range": {
+          "origin": "Self",
+          "distance_ft": 0,
+          "area_type": null,
+          "area_size": null
+        },
+        "duration": {
+          "type": "Instantaneous",
+          "interval": 0,
+          "unit": null
+        },
+        "components": {
+          "types": [
+            "V",
+            "S",
+            "M"
+          ],
+          "material_cost": "specially marked sticks, bones, cards, or other divinatory tokens worth 25+ GP"
+        },
+        "requires_attack_roll": false,
+        "requires_saving_throw": false,
+        "save_ability": null,
+        "description": "You receive an omen from an otherworldly entity about the results of a course of action that you plan to take within the next 30 minutes. The DM chooses the omen from the Omens table.\n\r\nOmens\r\n\r\n\r\nOmen\r\nFor Results That Will Be...\r\n\r\n\r\n\r\n\r\nWeal\r\nGood\r\n\r\n\r\nWoe\r\nBad\r\n\r\n\r\nWeal and woe\r\nGood and bad\r\n\r\n\r\nIndifference\r\nNeither good nor bad\r\n\r\n\r\n\r\nThe spell doesn\u2019t account for circumstances, such as other spells, that might change the results.\n\r\nIf you cast the spell more than once before finishing a Long Rest, there is a cumulative 25 percent chance for each casting after the first that you get no answer.",
+        "scale_type": null,
+        "effects": [],
+        "other_scaling": {}
       }
     ],
     "Paladin": []
