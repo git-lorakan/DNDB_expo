@@ -1,0 +1,617 @@
+{
+  "name": "Horns",
+  "gender": "Male",
+  "alignment": "Lawful Neutral",
+  "faith": null,
+  "age": 19,
+  "appearance": {
+    "hair": "Tousled Crop, Black",
+    "eyes": "Captivating Violet",
+    "skin": "Flawless deep plum",
+    "height": "5'4\"",
+    "weight": 160
+  },
+  "level": 1,
+  "proficiency_bonus": 2,
+  "experience_points": 0,
+  "inspiration": false,
+  "race": {
+    "name": "Tiefling",
+    "size": "Medium",
+    "speed": {
+      "walk": 30
+    },
+    "traits": [
+      {
+        "name": "Darkvision",
+        "summary": "You have Darkvision with a range of 60 ft."
+      },
+      {
+        "name": "Otherworldly Presence",
+        "summary": "You know the Thaumaturgy cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy Trait."
+      },
+      {
+        "name": "Creature Type",
+        "summary": "You are a Humanoid."
+      },
+      {
+        "name": "Fiendish Legacy",
+        "summary": "Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of that legacy.",
+        "choice": {
+          "status": "resolved",
+          "picks": [
+            "Cthonic Legacy"
+          ]
+        }
+      },
+      {
+        "name": "Fiendish Legacy Spells",
+        "summary": "When you choose your Fiendish Legacy, and at character levels 3 and 5, you learn a spell as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the legacy).",
+        "choice": {
+          "status": "resolved",
+          "picks": [
+            "Intelligence"
+          ]
+        }
+      },
+      {
+        "name": "Ability Score Increases",
+        "summary": "When determining your character\u2019s ability scores, increase one score by 2 and increase a different score by 1, or increase three different scores by 1.",
+        "choice": {
+          "status": "unresolved_in_source",
+          "picks": []
+        }
+      }
+    ]
+  },
+  "background": {
+    "name": "Sage",
+    "skill_proficiencies": "Arcana and History",
+    "tool_proficiencies": "Calligrapher's Supplies",
+    "languages": "",
+    "feature_name": "Magic Initiate (Wizard)"
+  },
+  "classes": [
+    {
+      "name": "Wizard",
+      "level": 1,
+      "subclass": null,
+      "hit_die": "d6",
+      "is_starting_class": true,
+      "features_gained": [
+        {
+          "name": "Core Wizard Traits",
+          "summary": "As a Level 1 Character:\n\r\n\r\nGain all the traits in the Core Wizard Traits table.\r\nGain the Wizard\u2019s level 1 features.\r\n\r\nCore Wizard Traits\r\n\r\n\r\n\r\nPrimary Ability\r\nIntelligence\r\n\r\n\r\nHit Point Die\r\nD6 per Wizard level\r\n\r\n\r\nSaving Throw Proficiencies\r\nIntelligence and Wisdom\r\n\r\n\r\nSkill Proficiencies\r\nChoose 2: Arcana, History, Insight, Investigation, Medicine, Nature, or Religion\r\n\r\n\r\nWeapon Proficiencies\r\nSimple weapons\r\n\r\n\r\nArmor Training\r\nNone\r\n\r\n\r\nStarting Equipment\r\nChoose A or B: (A) 2 Daggers, Arcane Focus (Quarterstaff), Robe, Spellbook, Scholar\u2019s Pack, and 5 GP; or (B) 55 GP",
+          "choice": {
+            "status": "resolved",
+            "picks": [
+              "Religion",
+              "Arcana"
+            ]
+          }
+        },
+        {
+          "name": "Spellcasting",
+          "summary": "As a student of arcane magic, you have learned to cast spells.\n\r\nCantrips. You know three Wizard cantrips of your choice. Whenever you finish a Long Rest, you can replace one of your cantrips from this feature with another Wizard cantrip of your choice.\n\r\nWhen you reach Wizard levels 4 and 10, you learn another Wizard cantrip of your choice, as shown in the Cantrips column of the Wizard Features table.\n\r\nSpellbook. Your wizardly apprenticeship culminated in the creation of a unique book: your spellbook. It is a Tiny object that weighs 3 pounds, contains 100 pages, and can be read only by you or someone casting Identify. You determine the book\u2019s appearance and materials, such as a gilt-edged tome or a collection of vellum bound with twine.\n\r\nThe book contains the level 1+ spells you know. It starts with six level 1 Wizard spells of your choice.\n\r\nWhenever you gain a Wizard level after 1, add two Wizard spells of your choice to your spellbook. Each of these spells must be of a level for which you have spell slots, as shown in the Wizard Features table. The spells are the culmination of arcane research you do regularly.\n\r\nSpell Slots. The Wizard Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended slots when you finish a Long Rest.\n\r\nPrepared Spells of Level 1+. You prepare the list of level 1+ spells that are available for you to cast with this feature. To do so, choose four spells from your spellbook. The chosen spells must be of a level for which you have spell slots.\n\r\nThe number of spells on your list increases as you gain Wizard levels, as shown in the Prepared Spells column of the Wizard Features table. Whenever that number increases, choose additional Wizard spells until the number of spells on your list matches the number in the table. The chosen spells must be of a level for which you have spell slots. For example, if you\u2019re a level 3 Wizard, your list of prepared spells can include six spells of levels 1 and 2 in any combination, chosen from your spellbook.\n\r\nIf another Wizard feature gives you spells that you always have prepared, those spells don\u2019t count against the number of spells you can prepare with this feature, but those spells otherwise count as Wizard spells for you.\n\r\nChanging Your Prepared Spells. Whenever you finish a Long Rest, you can change your list of prepared spells, replacing any of the spells there with spells from your spellbook.\n\r\nSpellcasting Ability. Intelligence is your spellcasting ability for your Wizard spells.\n\r\nSpellcasting Focus. You can use an Arcane Focus or your spellbook as a Spellcasting Focus for your Wizard spells.\n\r\n\r\nExpanding and Replacing a Spellbook\n\r\nThe spells you add to your spellbook as you gain levels reflect your ongoing magical research, but you might find other spells during your adventures that you can add to the book. You could discover a Wizard spell on a Spell Scroll, for example, and then copy it into your spellbook.\n\r\nCopying a Spell into the Book. When you find a level 1+ Wizard spell, you can copy it into your spellbook if it\u2019s of a level you can prepare and if you have time to copy it. For each level of the spell, the transcription takes 2 hours and costs 50 GP. Afterward you can prepare the spell like the other spells in your spellbook.\n\r\nCopying the Book. You can copy a spell from your spellbook into another book. This is like copying a new spell into your spellbook but faster, since you already know how to cast the spell. You need spend only 1 hour and 10 GP for each level of the copied spell.\n\r\nIf you lose your spellbook, you can use the same procedure to transcribe the Wizard spells that you have prepared into a new spellbook. Filling out the remainder of the new book requires you to find new spells to do so. For this reason, many wizards keep a backup spellbook."
+        },
+        {
+          "name": "Ritual Adept",
+          "summary": "You can cast any spell as a Ritual if that spell has the Ritual tag and the spell is in your spellbook. You needn\u2019t have the spell prepared, but you must read from the book to cast a spell in this way."
+        },
+        {
+          "name": "Arcane Recovery",
+          "summary": "When you finish a Short Rest, you can recover expended spell slots. The spell slots can have a combined level equal to no more than 1, and none of the slots can be level 6 or higher.\r\n\r\nYou can use this feature once per Long Rest."
+        }
+      ],
+      "pending_choices": [
+        {
+          "name": "Wizard Subclass",
+          "required_level": 3,
+          "status": "not_yet_available",
+          "picks": []
+        }
+      ]
+    }
+  ],
+  "ability_scores": {
+    "Strength": {
+      "score": 8,
+      "modifier": -1
+    },
+    "Dexterity": {
+      "score": 13,
+      "modifier": 1
+    },
+    "Constitution": {
+      "score": 16,
+      "modifier": 3
+    },
+    "Intelligence": {
+      "score": 17,
+      "modifier": 3
+    },
+    "Wisdom": {
+      "score": 10,
+      "modifier": 0
+    },
+    "Charisma": {
+      "score": 10,
+      "modifier": 0
+    }
+  },
+  "hit_points": {
+    "max": 6,
+    "current": 6,
+    "temporary": 0
+  },
+  "speed": {
+    "walk": 30
+  },
+  "proficiencies": {
+    "saving_throws": [
+      "Intelligence",
+      "Wisdom"
+    ],
+    "skills": {
+      "Arcana": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      },
+      "History": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      },
+      "Medicine": {
+        "ability": "Wisdom",
+        "proficient": true,
+        "expertise": false
+      },
+      "Religion": {
+        "ability": "Intelligence",
+        "proficient": true,
+        "expertise": false
+      }
+    },
+    "tools": [
+      "Calligrapher's Supplies"
+    ],
+    "weapons": [
+      "Simple Weapons"
+    ],
+    "armor": [],
+    "languages": [
+      "Common",
+      "Dwarvish",
+      "Gnomish"
+    ],
+    "damage_resistances": [
+      "Necrotic"
+    ]
+  },
+  "feats": [
+    {
+      "name": "Magic Initiate (Wizard)",
+      "summary": "Two Cantrips. You learn two cantrips of your choice from the Wizard spell list. Int., Wis., or Cha. is your spellcasting ability for this feat's spells.\r\n\r\nLevel 1 Spell. Choose a level 1 spell from the Wizard spell list. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest. You can also cast the spell using any spell slots you have.\r\n\r\nSpell Change. Whenever you gain a new level, you can replace one of the spells you chose for this feat with a different spell of the same level from the chosen spell list.\r\n\r\nRepeatable. You can take this feat more than once, but you must choose a different spell list each time.",
+      "is_origin_feat": true,
+      "tags": [
+        "Origin"
+      ],
+      "choice": {
+        "status": "resolved",
+        "picks": [
+          "Intelligence",
+          "Prestidigitation",
+          "Mending",
+          "Sleep"
+        ]
+      }
+    },
+    {
+      "name": "Sage Ability Score Improvements",
+      "summary": "The Sage Background allows you to choose between Constitution, Intelligence, and Wisdom. Increase one of these scores by 2 and another one by 1, or increase all three by 1. None of these increases can raise a score above 20.",
+      "is_origin_feat": false,
+      "tags": [
+        "__INITIAL_ASI",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "resolved",
+        "picks": [
+          "Increase two scores (+2 / +1)",
+          "Intelligence Score",
+          "Constitution Score"
+        ]
+      }
+    },
+    {
+      "name": "Dark Bargain",
+      "summary": "At your GM's discretion, you have taken a Dark Bargain.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Circle Magic (Intelligence)",
+      "summary": "When you cast a spell that has a casting time of an action or 1 minute or longer and cast it using a spell slot, you can cast it as a Circle spell. Casting a Circle spell follow the usual rules for spellcasting, and the primary caster (\u201cyou\u201d in these rules) decide the spell\u2019s targets, maintain Concentration if required, provide the spell\u2019s components, expend the slot for casting the spell, and decide any of the options noted. The spell\u2019s effects originate from you.\r\n\r\nYou take a Magic action to initiate casting a Circle spell. When you do, you choose which Circle casting option you\u2019re using for this casting; you must also meet any other requirements described in that option\u2019s text.\r\n\r\nCasting a Circle spell requires that one or more other spellcasters, called secondary casters, lend their magic to the spell. They must have the Spellcasting or Pact Magic feature to participate in a Circle spell. Each secondary caster must take the Magic action before the start of your turn while remaining within 30 ft. of you to contribute to the spell. If the spell has a casting time of 1 minute or more, you and each caster must take the Magic action on each of your turns for the entire casting time, you must each maintain Concentration while doing so. If any of the caster\u2019s Concentration is broken, the spell fails.\r\n\r\nIf the spell fails, nothing happens. The spell slot isn\u2019t expended, and any Material components aren\u2019t consumed. To cast the spell again, you must start over.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ]
+    },
+    {
+      "name": "Character Threads",
+      "summary": "Threads are aspects added to characters at any time during their career that have a specific short or long-term goal.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Runestones",
+      "summary": "At the beginning of the Northlands Sagas adventure path, each player should draw one Runestone randomly.",
+      "is_origin_feat": false,
+      "tags": [
+        "__DISGUISE_FEAT",
+        "__DISPLAY_WITH_DATA_ORIGIN"
+      ],
+      "choice": {
+        "status": "unresolved_in_source",
+        "picks": []
+      }
+    },
+    {
+      "name": "Living Shadow",
+      "summary": "Grasping Shadow. You learn the Mage Hand spell and can cast it without spell components. Int., Wis., or Cha. is your spellcasting ability for this spell.\r\n\r\nLengthened Strike. When you make a melee attack roll as part of the Attack or Magic action on your turn, you can increase your reach for that attack by 10 ft. You can use this feature 2 times per Long Rest.\r\n\r\nOminous Will. Immediately after you make a D20 Test and roll a 1 on the d20, make a Wis. saving throw (DC 15). On a failed save, you have the Incapacitated condition until the start of your next turn, and must roll on the Shadow\u2019s Will table to determine what you do during that turn.",
+      "is_origin_feat": false,
+      "tags": [
+        "Dark Gift"
+      ],
+      "choice": {
+        "status": "resolved",
+        "picks": [
+          "Intelligence"
+        ]
+      }
+    }
+  ],
+  "personality": {
+    "appearance": "Horns: Sleek, polished, sweeping backward like a crown.\nTail: Smooth, spade-tipped"
+  },
+  "currency": {
+    "cp": 0,
+    "sp": 0,
+    "gp": 55,
+    "ep": 0,
+    "pp": 0
+  },
+  "inventory": [
+    {
+      "name": "Dagger",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 2,
+      "type": "Dagger",
+      "rarity": "Common",
+      "damage": "1d4",
+      "damage_type": "Piercing",
+      "armor_class": null
+    },
+    {
+      "name": "Dagger",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 2,
+      "type": "Dagger",
+      "rarity": "Common",
+      "damage": "1d4",
+      "damage_type": "Piercing",
+      "armor_class": null
+    },
+    {
+      "name": "Quarterstaff",
+      "quantity": 1,
+      "equipped": true,
+      "attuned": false,
+      "weight": 4,
+      "cost_gp": 0.2,
+      "type": "Quarterstaff",
+      "rarity": "Common",
+      "damage": "1d6",
+      "damage_type": "Bludgeoning",
+      "armor_class": null
+    },
+    {
+      "name": "Spellbook",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 3,
+      "cost_gp": 50,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Backpack",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 5,
+      "cost_gp": 2,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Robe",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 4,
+      "cost_gp": 1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Oil",
+      "quantity": 10,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 0.1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Parchment",
+      "quantity": 10,
+      "equipped": false,
+      "attuned": false,
+      "weight": 0,
+      "cost_gp": 0.1,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Tinderbox",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 0.5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Book",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 5,
+      "cost_gp": 25,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Lamp",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 1,
+      "cost_gp": 0.5,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Ink Pen",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 0,
+      "cost_gp": 0.02,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    },
+    {
+      "name": "Ink",
+      "quantity": 1,
+      "equipped": false,
+      "attuned": false,
+      "weight": 0,
+      "cost_gp": 10,
+      "type": "Gear",
+      "rarity": "Common",
+      "damage": null,
+      "damage_type": null,
+      "armor_class": null
+    }
+  ],
+  "spells": {
+    "race": [
+      {
+        "name": "Chill Touch",
+        "level": 0,
+        "school": "Necromancy",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Thaumaturgy",
+        "level": 0,
+        "school": "Transmutation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      }
+    ],
+    "feat": [
+      {
+        "name": "Mage Hand",
+        "level": 0,
+        "school": "Conjuration",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Mending",
+        "level": 0,
+        "school": "Transmutation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Prestidigitation",
+        "level": 0,
+        "school": "Transmutation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Sleep",
+        "level": 1,
+        "school": "Enchantment",
+        "concentration": true,
+        "ritual": false,
+        "prepared": false
+      }
+    ],
+    "Wizard": [
+      {
+        "name": "Fire Bolt",
+        "level": 0,
+        "school": "Evocation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Mending",
+        "level": 0,
+        "school": "Transmutation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Poison Spray",
+        "level": 0,
+        "school": "Necromancy",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Alarm",
+        "level": 1,
+        "school": "Abjuration",
+        "concentration": false,
+        "ritual": true,
+        "prepared": false
+      },
+      {
+        "name": "Burning Hands",
+        "level": 1,
+        "school": "Evocation",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      },
+      {
+        "name": "Comprehend Languages",
+        "level": 1,
+        "school": "Divination",
+        "concentration": false,
+        "ritual": true,
+        "prepared": false
+      },
+      {
+        "name": "Detect Magic",
+        "level": 1,
+        "school": "Divination",
+        "concentration": true,
+        "ritual": true,
+        "prepared": false
+      },
+      {
+        "name": "Identify",
+        "level": 1,
+        "school": "Divination",
+        "concentration": false,
+        "ritual": true,
+        "prepared": false
+      },
+      {
+        "name": "Mage Armor",
+        "level": 1,
+        "school": "Abjuration",
+        "concentration": false,
+        "ritual": false,
+        "prepared": false
+      }
+    ]
+  },
+  "notes": {},
+  "computed_stats": {
+    "passive_perception": 10,
+    "armor_class": {
+      "value": 11,
+      "basis": "unarmored"
+    },
+    "initiative": 1,
+    "spellcasting": [
+      {
+        "class": "Wizard",
+        "ability": "Intelligence",
+        "spell_save_dc": 13,
+        "spell_attack_bonus": 5
+      }
+    ]
+  }
+}

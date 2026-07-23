@@ -11,8 +11,10 @@ Usage:
 """
 
 import argparse
+import ast
 import json
 import math
+import operator
 import re
 from html import unescape
 
@@ -20,6 +22,8 @@ ABILITY_NAMES = {1: "Strength", 2: "Dexterity", 3: "Constitution",
                   4: "Intelligence", 5: "Wisdom", 6: "Charisma"}
 ABILITY_SLUGS = {1: "strength", 2: "dexterity", 3: "constitution",
                   4: "intelligence", 5: "wisdom", 6: "charisma"}
+ABILITY_ABBR = {"str": "Strength", "dex": "Dexterity", "con": "Constitution",
+                 "int": "Intelligence", "wis": "Wisdom", "cha": "Charisma"}
 
 ALIGNMENTS = {
     1: "Lawful Good", 2: "Neutral Good", 3: "Chaotic Good",
@@ -48,6 +52,92 @@ def strip_html(text):
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
+
+
+_SAFE_OPS = {
+    ast.Add: operator.add, ast.Sub: operator.sub,
+    ast.Mult: operator.mul, ast.Div: operator.truediv,
+}
+
+
+def safe_eval_arithmetic(expr):
+    """Evaluate a whitelisted arithmetic expression (+ - * / and parens on numeric
+    literals only). Returns None instead of raising if the expression isn't purely
+    arithmetic, so callers can fall back to leaving text unrendered."""
+    try:
+        node = ast.parse(expr, mode="eval").body
+    except SyntaxError:
+        return None
+
+    def _eval(n):
+        if isinstance(n, ast.Constant) and isinstance(n.value, (int, float)):
+            return n.value
+        if isinstance(n, ast.BinOp) and type(n.op) in _SAFE_OPS:
+            return _SAFE_OPS[type(n.op)](_eval(n.left), _eval(n.right))
+        if isinstance(n, ast.UnaryOp) and isinstance(n.op, ast.USub):
+            return -_eval(n.operand)
+        raise ValueError("disallowed expression")
+
+    try:
+        return _eval(node)
+    except Exception:
+        return None
+
+
+def render_templates(text, proficiency, classlevel=None, ability_scores=None):
+    """Render DDB's inline template placeholders, e.g. {{proficiency#unsigned}},
+    {{13+proficiency#unsigned}}, {{modifier:cha#unsigned}}, {{(classlevel/2)@roundup}}.
+    If a placeholder references a variable that isn't available in the current context
+    (e.g. classlevel while rendering race/feat text with no specific class), the
+    placeholder is left untouched rather than guessed at."""
+    if not text or "{{" not in text:
+        return text
+
+    def replace(m):
+        raw = m.group(1)
+        func = None
+        if "@" in raw:
+            raw, func = raw.split("@", 1)
+        if "#" in raw:
+            raw, _fmt = raw.split("#", 1)  # only "unsigned" (bare number) observed; nothing else to special-case
+        content = raw.strip()
+        failed = False
+
+        def sub_modifier(mm):
+            nonlocal failed
+            name = ABILITY_ABBR.get(mm.group(1).lower())
+            mod = (ability_scores or {}).get(name, {}).get("modifier") if name else None
+            if mod is None:
+                failed = True
+                return mm.group(0)
+            return str(mod)
+
+        content = re.sub(r"modifier:([a-zA-Z]+)", sub_modifier, content)
+
+        if re.search(r"\bclasslevel\b", content):
+            if classlevel is None:
+                failed = True
+            else:
+                content = re.sub(r"\bclasslevel\b", str(classlevel), content)
+
+        content = re.sub(r"\bproficiency\b", str(proficiency), content)
+
+        if failed:
+            return m.group(0)
+
+        value = safe_eval_arithmetic(content)
+        if value is None:
+            return m.group(0)
+
+        if func == "roundup":
+            value = math.ceil(value)
+        elif func == "rounddown":
+            value = math.floor(value)
+        if isinstance(value, float) and value.is_integer():
+            value = int(value)
+        return str(value)
+
+    return re.sub(r"\{\{([^}]+)\}\}", replace, text)
 
 
 def modifier(score):
@@ -90,6 +180,84 @@ def gather_ability_scores(data):
     return scores
 
 
+def build_choice_index(data):
+    """Cross-reference data.choices.<category> (which records a componentId + the
+    optionValue actually picked) against data.options.<category> (per-category resolved
+    option definitions) and, as a fallback, data.choices.choiceDefinitions (a global
+    id->label pool keyed by "<componentTypeId>-<type>", used for plain skill/ability/
+    tool/language/size picks that DDB doesn't emit a category-specific option row for).
+
+    The lookup key (componentId) is the *defining entity's own id* - a racial trait's
+    definition id, a feat's definition id, or a class feature's id - not the id of the
+    granted instance itself (e.g. a feat's own componentId in data.feats is unrelated;
+    it's definition.id that lines up with componentId here).
+
+    Returns: dict[componentId] -> list of {"resolved_name": str|None, "label": str|None,
+    "source_category": category, "resolution_source": "options"|"choiceDefinitions"|None}
+    A None resolved_name means DDB recorded a choice slot but no resolvable value for it
+    (optionValue is null, or it points at an id absent from both fallback tables) -
+    genuinely unresolved in source, not something to guess at.
+    """
+    choices = data.get("choices") or {}
+    options = data.get("options") or {}
+
+    options_index = {}
+    for category, opts in options.items():
+        if not opts:
+            continue
+        for o in opts:
+            cid = o.get("componentId")
+            defn = o.get("definition") or {}
+            options_index.setdefault(cid, {})[defn.get("id")] = defn.get("name")
+
+    definitions_index = {}
+    for grp in choices.get("choiceDefinitions") or []:
+        definitions_index[grp.get("id")] = {o["id"]: o["label"] for o in grp.get("options", [])}
+
+    index = {}
+    for category in ("race", "class", "background", "item", "feat"):
+        for c in (choices.get(category) or []):
+            cid = c.get("componentId")
+            option_value = c.get("optionValue")
+            resolved_name = None
+            source = None
+            if option_value is not None:
+                by_def_id = options_index.get(cid, {})
+                if option_value in by_def_id:
+                    resolved_name = by_def_id[option_value]
+                    source = "options"
+                else:
+                    pool = definitions_index.get(f"{c.get('componentTypeId')}-{c.get('type')}", {})
+                    if option_value in pool:
+                        resolved_name = pool[option_value]
+                        source = "choiceDefinitions"
+            index.setdefault(cid, []).append({
+                "label": c.get("label"),
+                "resolved_name": resolved_name,
+                "source_category": category,
+                "resolution_source": source,
+            })
+    return index
+
+
+def resolve_choice(index, component_id):
+    """Look up every choice recorded against a component id. Returns (status, picks):
+      ("resolved", [names])            - at least one recorded choice has a resolved name
+      ("unresolved_in_source", [])     - choice slot(s) exist but no name could be resolved
+      (None, [])                       - no choice at all recorded for this component
+                                          (nothing to pick - not every trait/feature/feat has one)
+    Callers that know a feature hasn't been reached yet (e.g. a level-3 subclass pick on a
+    level-1 character) should relabel an "unresolved_in_source" result as "not_yet_available"
+    themselves, since this function has no notion of character level."""
+    entries = index.get(component_id)
+    if not entries:
+        return None, []
+    picks = [e["resolved_name"] for e in entries if e["resolved_name"] is not None]
+    if picks:
+        return "resolved", picks
+    return "unresolved_in_source", []
+
+
 def total_character_level(data):
     return sum(c.get("level", 0) for c in data.get("classes", []))
 
@@ -98,28 +266,50 @@ def proficiency_bonus(level):
     return 2 + max(0, (level - 1) // 4)
 
 
-def gather_classes(data):
+def gather_classes(data, choice_index, proficiency, ability_scores):
     classes = []
     for c in data.get("classes", []):
         definition = c.get("definition") or {}
         subclass = c.get("subclassDefinition") or {}
         level = c.get("level", 0)
-        features = []
+
+        features_gained = []
+        pending_choices = []
         for feat in c.get("classFeatures", []):
             fdef = feat.get("definition", feat)
-            req_level = fdef.get("requiredLevel")
-            if req_level is not None and req_level > level:
-                continue
             name = fdef.get("name")
-            if name:
-                features.append(name)
+            if not name:
+                continue
+            req_level = fdef.get("requiredLevel")
+            status, picks = resolve_choice(choice_index, fdef.get("id"))
+
+            if req_level is not None and req_level > level:
+                # Not gained yet at the character's current level. Still surface a
+                # feature with a pending choice (e.g. a level-3 subclass pick) instead
+                # of letting it silently vanish, so it reads as "not chosen yet" rather
+                # than looking like a gap in the extraction.
+                if status is not None:
+                    pending_choices.append({
+                        "name": name, "required_level": req_level,
+                        "status": "not_yet_available", "picks": picks,
+                    })
+                continue
+
+            summary = render_templates(strip_html(fdef.get("snippet") or fdef.get("description")),
+                                        proficiency, classlevel=level, ability_scores=ability_scores)
+            entry = {"name": name, "summary": summary}
+            if status is not None:
+                entry["choice"] = {"status": status, "picks": picks}
+            features_gained.append(entry)
+
         classes.append({
             "name": definition.get("name"),
             "level": level,
             "subclass": subclass.get("name"),
             "hit_die": f"d{definition.get('hitDice')}" if definition.get("hitDice") else None,
             "is_starting_class": c.get("isStartingClass", False),
-            "features_gained": features,
+            "features_gained": features_gained,
+            "pending_choices": pending_choices,
         })
     return classes
 
@@ -198,14 +388,21 @@ def gather_size(data):
     return None
 
 
-def gather_race(data):
+def gather_race(data, choice_index, proficiency, ability_scores):
     race = data.get("race") or {}
     traits = []
     for t in race.get("racialTraits", []):
         d = t.get("definition", t)
         name = d.get("name")
-        if name and name.lower() not in ("size", "speed", "age", "alignment", "languages"):
-            traits.append({"name": name, "summary": strip_html(d.get("snippet") or d.get("description"))})
+        if not name or name.lower() in ("size", "speed", "age", "alignment", "languages"):
+            continue
+        summary = render_templates(strip_html(d.get("snippet") or d.get("description")),
+                                    proficiency, ability_scores=ability_scores)
+        trait = {"name": name, "summary": summary}
+        status, picks = resolve_choice(choice_index, d.get("id"))
+        if status is not None:
+            trait["choice"] = {"status": status, "picks": picks}
+        traits.append(trait)
     return {
         "name": race.get("fullName") or race.get("baseRaceName"),
         "size": gather_size(data),
@@ -225,14 +422,23 @@ def gather_background(data):
     }
 
 
-def gather_feats(data):
+def gather_feats(data, choice_index, proficiency, ability_scores):
     feats = []
     for f in data.get("feats", []):
         d = f.get("definition", f)
-        feats.append({
+        summary = render_templates(strip_html(d.get("snippet") or d.get("description")),
+                                    proficiency, ability_scores=ability_scores)
+        tags = [c.get("tagName") for c in (d.get("categories") or []) if c.get("tagName")]
+        feat = {
             "name": d.get("name"),
-            "summary": strip_html(d.get("snippet") or d.get("description")),
-        })
+            "summary": summary,
+            "is_origin_feat": "Origin" in tags,
+            "tags": tags,
+        }
+        status, picks = resolve_choice(choice_index, d.get("id"))
+        if status is not None:
+            feat["choice"] = {"status": status, "picks": picks}
+        feats.append(feat)
     return feats
 
 
@@ -310,11 +516,88 @@ def gather_notes(data):
     return {k: v for k, v in notes.items() if v}
 
 
+def gather_computed_stats(data, ability_scores, proficiency, proficiencies):
+    """Derived combat/spellcasting numbers, kept separate from the raw source fields
+    above them. Everything here is *computed* by this script, not read verbatim from
+    the export - flag accordingly rather than presenting it as DDB-confirmed."""
+    dex_mod = ability_scores["Dexterity"]["modifier"]
+
+    equipped_armor = None
+    equipped_shield = False
+    for item in data.get("inventory", []):
+        if not item.get("equipped"):
+            continue
+        d = item.get("definition") or {}
+        item_type = d.get("type") or ""
+        filter_type = d.get("filterType") or ""
+        if "Shield" in item_type or filter_type == "Shield":
+            equipped_shield = True
+        elif "Armor" in item_type or filter_type == "Armor":
+            equipped_armor = d
+
+    armor_class = {}
+    if equipped_armor is None:
+        armor_class = {"value": 10 + dex_mod, "basis": "unarmored"}
+    else:
+        base_ac = equipped_armor.get("armorClass") or 10
+        item_type = equipped_armor.get("type") or ""
+        if "Heavy" in item_type:
+            value = base_ac
+        elif "Medium" in item_type:
+            value = base_ac + min(dex_mod, 2)
+        else:
+            value = base_ac + dex_mod  # Light armor, or an unrecognized armor "type" string
+        armor_class = {
+            "value": value,
+            "basis": equipped_armor.get("name"),
+            "verified": False,
+            "note": ("Armor-type Dex-cap handling (light/medium/heavy) is unverified against a "
+                     "real armored-character export - this character has no armor equipped, so "
+                     "this code path has only been exercised against synthetic data. Recheck the "
+                     "'type' string convention DDB uses for actual armor items before trusting this."),
+        }
+    if equipped_shield:
+        armor_class["value"] += 2
+        armor_class["shield"] = True
+
+    initiative = dex_mod
+    for _category, m in iter_modifiers(data):
+        if m.get("type") == "bonus" and m.get("subType") == "initiative":
+            initiative += m.get("value") or 0
+
+    spellcasting = []
+    for c in data.get("classes", []):
+        definition = c.get("definition") or {}
+        ability_id = definition.get("spellCastingAbilityId")
+        if not ability_id:
+            continue
+        ability_name = ABILITY_NAMES.get(ability_id)
+        mod = ability_scores.get(ability_name, {}).get("modifier", 0)
+        spellcasting.append({
+            "class": definition.get("name"),
+            "ability": ability_name,
+            "spell_save_dc": 8 + proficiency + mod,
+            "spell_attack_bonus": proficiency + mod,
+        })
+
+    perception = proficiencies["skills"].get("Perception")
+    passive_perception = 10 + ability_scores["Wisdom"]["modifier"] + (proficiency if perception and perception["proficient"] else 0)
+
+    return {
+        "passive_perception": passive_perception,
+        "armor_class": armor_class,
+        "initiative": initiative,
+        "spellcasting": spellcasting,
+    }
+
+
 def extract(raw):
     data = raw["data"]
     level = total_character_level(data)
+    proficiency = proficiency_bonus(level)
     ability_scores = gather_ability_scores(data)
     proficiencies = gather_proficiencies(data)
+    choice_index = build_choice_index(data)
 
     character = {
         "name": data.get("name"),
@@ -330,26 +613,24 @@ def extract(raw):
             "weight": data.get("weight"),
         },
         "level": level,
-        "proficiency_bonus": proficiency_bonus(level),
+        "proficiency_bonus": proficiency,
         "experience_points": data.get("currentXp"),
         "inspiration": data.get("inspiration", False),
-        "race": gather_race(data),
+        "race": gather_race(data, choice_index, proficiency, ability_scores),
         "background": gather_background(data),
-        "classes": gather_classes(data),
+        "classes": gather_classes(data, choice_index, proficiency, ability_scores),
         "ability_scores": ability_scores,
         "hit_points": gather_hit_points(data),
         "speed": gather_speed(data),
         "proficiencies": proficiencies,
-        "passive_perception": 10 + ability_scores["Wisdom"]["modifier"] +
-            (proficiency_bonus(level) if "Perception" in proficiencies["skills"]
-             and proficiencies["skills"]["Perception"]["proficient"] else 0),
-        "feats": gather_feats(data),
+        "feats": gather_feats(data, choice_index, proficiency, ability_scores),
         "personality": gather_traits(data),
         "currency": data.get("currencies"),
         "inventory": gather_inventory(data),
         "spells": gather_spells(data),
         **gather_spell_slots(data),
         "notes": gather_notes(data),
+        "computed_stats": gather_computed_stats(data, ability_scores, proficiency, proficiencies),
     }
     return character
 
@@ -365,10 +646,17 @@ def to_text_summary(c):
         lines.append(f"  {name:<13} {s['score']:>2} ({fmt_mod(s['modifier'])})")
     lines.append("")
     hp = c["hit_points"]
+    stats = c["computed_stats"]
     lines.append(f"HP: {hp['current']}/{hp['max']} (temp {hp['temporary']})")
     lines.append(f"Proficiency Bonus: +{c['proficiency_bonus']}")
     lines.append(f"Speed: {c['speed']}")
-    lines.append(f"Passive Perception: {c['passive_perception']}")
+    ac = stats["armor_class"]
+    ac_note = "" if ac.get("verified", True) else "  (! unverified capping logic, see JSON)"
+    lines.append(f"Armor Class: {ac['value']} ({ac['basis']}){ac_note}")
+    lines.append(f"Initiative: {fmt_mod(stats['initiative'])}")
+    lines.append(f"Passive Perception: {stats['passive_perception']}")
+    for sc in stats["spellcasting"]:
+        lines.append(f"Spell Save DC ({sc['class']}): {sc['spell_save_dc']}  |  Spell Attack: {fmt_mod(sc['spell_attack_bonus'])}")
     lines.append("")
     lines.append("Saving Throw Proficiencies: " + ", ".join(c["proficiencies"]["saving_throws"]))
     prof_skills = [k for k, v in c["proficiencies"]["skills"].items() if v["proficient"]]
