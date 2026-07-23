@@ -21,6 +21,7 @@
     "speed": {
       "walk": 30
     },
+    "senses": {},
     "traits": [
       {
         "name": "Ability Score Increases",
@@ -168,6 +169,7 @@
   "speed": {
     "walk": 30
   },
+  "senses": {},
   "proficiencies": {
     "saving_throws": {
       "Strength": {

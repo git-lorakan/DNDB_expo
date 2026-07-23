@@ -21,6 +21,7 @@
     "speed": {
       "walk": 30
     },
+    "senses": {},
     "traits": [
       {
         "name": "Resourceful",
@@ -154,6 +155,7 @@
   "speed": {
     "walk": 30
   },
+  "senses": {},
   "proficiencies": {
     "saving_throws": {
       "Strength": {

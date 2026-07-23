@@ -21,6 +21,9 @@
     "speed": {
       "walk": 30
     },
+    "senses": {
+      "darkvision": 60
+    },
     "traits": [
       {
         "name": "Celestial Resistance",
@@ -157,6 +160,9 @@
   },
   "speed": {
     "walk": 30
+  },
+  "senses": {
+    "darkvision": 60
   },
   "proficiencies": {
     "saving_throws": {

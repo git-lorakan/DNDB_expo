@@ -488,6 +488,28 @@ def gather_speed(data):
     return {k: v for k, v in speeds.items() if v}
 
 
+def gather_senses(data):
+    """Structured senses, e.g. {"darkvision": 60}, instead of leaving it inside racial
+    trait prose. "set-base" modifiers are confirmed to be exactly this (darkvision, the
+    only subType ever seen under this modifier type across all four exports this script
+    was tested against, each matching a race that should have it - Tiefling x2 - and
+    absent for races that shouldn't - Human, Reborn). data.customSenses is passed
+    through verbatim rather than decoded: it's empty in all four exports, so its schema
+    (e.g. whether entries use a senseId enum or a plain name) has no confirmed example
+    here to build a real mapping from."""
+    senses = {}
+    for _category, m in iter_modifiers(data):
+        if m.get("type") == "set-base" and m.get("value") is not None:
+            name = (m.get("friendlySubtypeName") or (m.get("subType") or "")).lower()
+            if name:
+                senses[name] = m["value"]
+
+    custom = data.get("customSenses")
+    if custom:
+        senses["custom"] = custom
+    return senses
+
+
 def gather_size(data):
     race = data.get("race") or {}
     if race.get("size"):
@@ -520,6 +542,7 @@ def gather_race(data, choice_index, resource_index, proficiency, ability_scores)
         "name": race.get("fullName") or race.get("baseRaceName"),
         "size": gather_size(data),
         "speed": gather_speed(data),
+        "senses": gather_senses(data),
         "traits": traits,
     }
 
@@ -1049,6 +1072,7 @@ def extract(raw):
         "hit_points": gather_hit_points(data),
         "hit_dice": gather_hit_dice(data),
         "speed": gather_speed(data),
+        "senses": gather_senses(data),
         "proficiencies": proficiencies,
         "feats": gather_feats(data, choice_index, resource_index, proficiency, ability_scores),
         "personality": gather_traits(data),
@@ -1080,6 +1104,8 @@ def to_text_summary(c):
     lines.append(f"Hit Dice: {hit_dice_str}")
     lines.append(f"Proficiency Bonus: +{c['proficiency_bonus']}")
     lines.append(f"Speed: {c['speed']}")
+    if c["senses"]:
+        lines.append(f"Senses: {c['senses']}")
     ac = stats["armor_class"]
     ac_note = "" if ac.get("verified", True) else "  (! unverified capping logic, see JSON)"
     lines.append(f"Armor Class: {ac['value']} ({ac['basis']}){ac_note}")
